@@ -14,6 +14,7 @@ from linebot.models import (
     LocationMessage, 
     LocationSendMessage,
     TextSendMessage, 
+    ImageSendMessage
     #StickerSendMessage, 
     #MessageImagemapAction, 
     #ImagemapArea, 
@@ -94,8 +95,8 @@ def handle_location(event):
         event.reply_token,
         [
             TextSendMessage(text="位置情報"),
-            TextSendMessage(text='{}\n{}\n{}'.format(event.message.address,event.message.latitude, event.message.longitude))
-            ImageSendMessage(originalContentUrl='{}'.format(map_image_url), previewImageUrl='{}'.format(map_image_url)),
+            TextSendMessage(text='{}\n{}\n{}'.format(event.message.address,event.message.latitude, event.message.longitude)),
+            ImageSendMessage(originalContentUrl='{}'.format(map_image_url), previewImageUrl='{}'.format(map_image_url))
             
         ]
     )
