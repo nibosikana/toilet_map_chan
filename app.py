@@ -58,7 +58,7 @@ def handle_message(event):
             [
                 TextSendMessage(text='位置情報を送ると近くで終電まで空いている駅一覧を教えるよ(0x100079)'),
                 TextSendMessage(text='line://nv/location'),
-                TextSendMessage(text='{}'.format(event.message.text)),
+                TextSendMessage(text='{}'.format(event.message.text))
             ]
         )
 
@@ -79,8 +79,8 @@ def handle_location(event):
         event.reply_token,
         [
             TextSendMessage(text="位置情報"),
-            TextSendMessage(text='{}\n{}\n{}'.format(event.message.address,event.message.latitude, event.message.longitude))
-            ImageSendMessage(original_content_url=map_image_url, preview_image_url=map_image_url),
+            TextSendMessage(text='{}\n{}\n{}'.format(event.message.address,event.message.latitude, event.message.longitude)),
+            ImageSendMessage(original_content_url=map_image_url, preview_image_url=map_image_url)
             
         ]
     )
