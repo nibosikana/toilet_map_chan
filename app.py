@@ -69,7 +69,7 @@ def handle_location(event):
         event.reply_token,
         [
             TextSendMessage(text="位置情報"),
-            TextSendMessage(text='{}'.format(event.message.address))
+            TextSendMessage(text='{}\n{}\n{}'.format(event.message.address,event.message.latitude, event.message.longitude))
         ]
     )
 
