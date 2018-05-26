@@ -14,18 +14,18 @@ from linebot.models import (
     LocationMessage, 
     LocationSendMessage,
     TextSendMessage, 
-    ImageSendMessage
-    #StickerSendMessage, 
-    #MessageImagemapAction, 
-    #ImagemapArea, 
-    #ImagemapSendMessage, 
-    #BaseSize
+    ImageSendMessage,
+    StickerSendMessage, 
+    MessageImagemapAction, 
+    ImagemapArea, 
+    ImagemapSendMessage, 
+    BaseSize
 )
 
-# from io import BytesIO, StringIO
-# from PIL import Image
-# import requests
-# import urllib.parse
+from io import BytesIO, StringIO
+from PIL import Image
+import requests
+import urllib.parse
 
 app = Flask(__name__)
 
@@ -79,6 +79,18 @@ def handle_message(event):
             ]
         )
 
+@app.route("/imagemap/<path:url>/<size>")
+def imagemap(url, size):
+    map_image_url = urllib.parse.unquote(url)
+    response = requests.get(map_image_url)
+    img = Image.open(BytesIO(response.content))
+    img_resize = img.resize((int(size), int(size)))
+    byte_io = BytesIO()
+    img_resize.save(byte_io, 'PNG')
+    byte_io.seek(0)
+    return send_file(byte_io, mimetype='image/png')
+
+
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location(event):
 
@@ -91,12 +103,28 @@ def handle_location(event):
     key = 'AIzaSyD_0kx_crEIA5mMLJWnfZN9Fo86Odp4LGY'
 
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
+
+    actions = [
+        MessageImagemapAction(
+            text = 'テスト',
+            area = ImagemapArea(
+                x = 0,
+                y = 0,
+                width = 1040,
+                height = 1040
+        )
+    )]
+
+
     line_bot_api.reply_message(
         event.reply_token,
         [
-            TextSendMessage(text="位置情報"),
-            TextSendMessage(text='{}\n{}\n{}'.format(event.message.address,event.message.latitude, event.message.longitude)),
-            ImageSendMessage(originalContentUrl='{}'.format(map_image_url), previewImageUrl='{}'.format(map_image_url))
+            ImagemapSendMessage(
+                base_url = 'https://{}/imagemap/{}'.format(request.host, urllib.parse.quote_plus(map_image_url)),
+                alt_text = '地図',
+                base_size = BaseSize(height=imagesize, width=imagesize),
+                actions = actions
+            )
             
         ]
     )
