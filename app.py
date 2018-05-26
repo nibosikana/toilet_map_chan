@@ -9,15 +9,22 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import (
-    MessageEvent, TextMessage, LocationMessage, 
-    LocationSendMessage,TextSendMessage, StickerSendMessage, 
-    MessageImagemapAction, ImagemapArea, ImagemapSendMessage, BaseSize
+    MessageEvent, 
+    TextMessage, 
+    LocationMessage, 
+    LocationSendMessage,
+    TextSendMessage, 
+    #StickerSendMessage, 
+    #MessageImagemapAction, 
+    #ImagemapArea, 
+    #ImagemapSendMessage, 
+    #BaseSize
 )
 
-from io import BytesIO, StringIO
-from PIL import Image
-import requests
-import urllib.parse
+# from io import BytesIO, StringIO
+# from PIL import Image
+# import requests
+# import urllib.parse
 
 app = Flask(__name__)
 
@@ -71,6 +78,27 @@ def handle_message(event):
             ]
         )
 
+@handler.add(MessageEvent, message=LocationMessage)
+def handle_location(event):
+
+    lat = event.message.latitude
+    lon = event.message.longitude
+
+    zoomlevel = 16
+    imagesize = 1040
+
+    key = 'AIzaSyD_0kx_crEIA5mMLJWnfZN9Fo86Odp4LGY'
+
+    map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
+    line_bot_api.reply_message(
+        event.reply_token,
+        [
+            TextSendMessage(text="位置情報"),
+            TextSendMessage(text='{}\n{}\n{}'.format(event.message.address,event.message.latitude, event.message.longitude))
+            ImageSendMessage(originalContentUrl='{}'.format(map_image_url), previewImageUrl='{}'.format(map_image_url)),
+            
+        ]
+    )
 
 
 if __name__ == "__main__":
