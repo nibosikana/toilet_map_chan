@@ -59,16 +59,7 @@ def handle_message(event):
                 TextSendMessage(text='位置情報を送ると近くで終電まで空いている駅一覧を教えるよ(※絵文字1) '),
                 TextSendMessage(text='line://nv/location'),
             ]
-        )
-
-@handler.add(MessageEvent, message=LocationMessage)
-def handle_location(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        [
-            TextSendMessage(text="{}\n{}\n{}".format(event.message.address, event.message.latitude, event.message.longitude)),
-        ]
-    )        
+        )        
 
 
 if __name__ == "__main__":
