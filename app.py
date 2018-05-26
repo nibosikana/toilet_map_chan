@@ -154,13 +154,13 @@ import math
 app = Flask(__name__)
 
 
- channel_secret = os.environ['LINE_CHANNEL_SECRET']
- channel_access_token = os.environ['LINE_CHANNEL_ACCESS_TOKEN']
+channel_secret = os.environ['LINE_CHANNEL_SECRET']
+channel_access_token = os.environ['LINE_CHANNEL_ACCESS_TOKEN']
 
 
- line_bot_api = LineBotApi(channel_access_token)
- handler = WebhookHandler(channel_secret)
- 
+line_bot_api = LineBotApi(channel_access_token)
+handler = WebhookHandler(channel_secret)
+
 @app.route("/", methods=['POST'])
 def callback():
     signature = request.headers['X-Line-Signature']
