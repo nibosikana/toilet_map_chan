@@ -67,7 +67,8 @@ def handle_location(event):
     line_bot_api.reply_message(
         event.reply_token,
         [
-            TextSendMessage(text="{}\n{}\n{}".format(event.message.address, event.message.latitude, event.message.longitude),
+            TextSendMessage(text="位置情報"),
+            TextSendMessage(text=event)
         ]
     )
 
