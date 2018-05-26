@@ -50,12 +50,24 @@ def callback():
     return 'OK'
 
 
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    if event.type == "message":
+        line_bot_api.reply_message(
+            event.reply_token,
+            [
+                TextSendMessage(text='位置情報を送ると近くで終電まで空いている駅一覧を教えるよ(0x100079)'),
+                TextSendMessage(text='line://nv/location'),
+            ]
+        )
+
+
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location(event):
     line_bot_api.reply_message(
         event.reply_token,
         [
-            TextSendMessage(text="こんにちは"),
+            TextSendMessage(text="位置情報"),
         ]
     )
 
