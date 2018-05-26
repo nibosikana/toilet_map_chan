@@ -111,7 +111,6 @@ def handle_location(event):
     line_bot_api.reply_message(
         event.reply_token,
         [
-            TextSendMessage(text="位置情報"),
             ImagemapSendMessage(
                 base_url = 'https://{}/imagemap/{}'.format(request.host, urllib.parse.quote_plus(map_image_url)),
                 alt_text = '地図',
