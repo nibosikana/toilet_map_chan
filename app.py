@@ -98,7 +98,7 @@ def handle_location(event):
     lon = event.message.longitude
 
     zoomlevel = 16
-    #imagesize = 1040
+    imagesize = 1040
 
     key = 'AIzaSyD_0kx_crEIA5mMLJWnfZN9Fo86Odp4LGY'
 
@@ -119,14 +119,14 @@ def handle_location(event):
     line_bot_api.reply_message(
         event.reply_token,
         [
-            ImageSendMessage(
+            TextSendMessage(text="位置情報"),
+            ImageSendMessage(original_content_url=map_image_url,preview_image_url=map_image_url)
                 # base_url = 'https://{}/imagemap/{}'.format(request.host, urllib.parse.quote_plus(map_image_url)),
                 # alt_text = '地図',
                 # base_size = BaseSize(height=imagesize, width=imagesize),
                 # actions = actions
-                original_content_url = map_image_url,
-                preview_image_url = map_image_url
-            )
+                
+            
             
         ]
     )
