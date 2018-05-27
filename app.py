@@ -126,7 +126,6 @@ def handle_location(event):
     center_lat_pixel, center_lon_pixel = latlon_to_pixel(lat, lon)
 
     marker_color = 'blue'
-    label = 'T'
     pin_width = 60 * 1.5
     pin_height = 84 * 1.5
 
@@ -145,12 +144,14 @@ def handle_location(event):
         x = marker_lat_pixel
         y = marker_lon_pixel
 
+        label = 'T{}'.format(i)
+
         if(pin_width / 2 < x < imagesize - pin_width / 2 and pin_height < y < imagesize - pin_width):
 
             map_image_url += '&markers=color:{}|label:{}|{},{}'.format(marker_color, label, pin[0], pin[1])
 
             actions.append(MessageImagemapAction(
-                text='https://twitter.com',
+                text='[T{}]のトイレに行きたい！'.format(str(i)),
                 area = ImagemapArea(
                     x = x - pin_width / 2,
                     y = y - pin_height / 2,
