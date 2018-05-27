@@ -49,13 +49,12 @@ def callback():
 
     return 'OK'
 
-@app.route("/imagemap")
-def imagemap():
-#@app.route("/imagemap/<path:url>/<size>")
-
-# def imagemap(url, size):
 
 
+@app.route("/imagemap/<path:url>")
+
+def imagemap(url, size):
+    url = 'test'
     # map_image_url = urllib.parse.unquote(url)
     # response = requests.get(map_image_url)
     # img = Image.open(BytesIO(response.content))
