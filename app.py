@@ -1,6 +1,6 @@
 import os
 import sys
-from flask import Flask, request, abort
+from flask import Flask, request, abort, send_file
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -11,6 +11,11 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, LocationMessage, TextSendMessage, ImageSendMessage, ImagemapSendMessage, BaseSize, MessageImagemapAction, ImagemapArea
 )
+
+from io import BytesIO, StringIO
+from PIL import Image
+import requests
+import urllib.parse
 
 app = Flask(__name__)
 
@@ -51,19 +56,17 @@ def callback():
 
 
 
-@app.route("/imagemap/<path:url>")
-
+@app.route("/imagemap/<path:url>/<size>")
 def imagemap(url, size):
-    url = 'test'
-    # map_image_url = urllib.parse.unquote(url)
-    # response = requests.get(map_image_url)
-    # img = Image.open(BytesIO(response.content))
-    # img_resize = img.resize((int(size), int(size)))
-    # byte_io = BytesIO()
-    # img_resize.save(byte_io, 'PNG')
-    # byte_io.seek(0)
-    # return send_file(byte_io, mimetype='image/png')
-    return "imagemap!!!!!!れ"
+    
+    map_image_url = urllib.parse.unquote(url)
+    response = requests.get(map_image_url)
+    img = Image.open(BytesIO(response.content))
+    img_resize = img.resize((int(size), int(size)))
+    byte_io = BytesIO()
+    img_resize.save(byte_io, 'PNG')
+    byte_io.seek(0)
+    return send_file(byte_io, mimetype='image/png')
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -88,16 +91,16 @@ def handle_location(event):
     zoomlevel = 16
     imagesize = 1040
 
-    # actions = [
-    #     MessageImagemapAction(
-    #         text = "位置情報教えて！",
-    #         area = ImagemapArea(
-    #             x = 0,
-    #             y = 0,
-    #             width = 1040,
-    #             height = 1040
-    #     )
-    # )]
+    actions = [
+        MessageImagemapAction(
+            text = "位置情報教えて！",
+            area = ImagemapArea(
+                x = 0,
+                y = 0,
+                width = 1040,
+                height = 1040
+        )
+    )]
 
 
     key = 'AIzaSyD_0kx_crEIA5mMLJWnfZN9Fo86Odp4LGY'
@@ -107,13 +110,13 @@ def handle_location(event):
     line_bot_api.reply_message(
         event.reply_token,
         [
-            # ImagemapSendMessage(
-            #     base_url = 'https://toilet-map-chan.herokuapp.com/imagemap/{}'.format(urllib.parse.quote_plus(map_image_url)),
-            #     alt_text = '地図',
-            #     base_size = BaseSize(height=imagesize, width=imagesize),
-            #     actions = actions
-            # )
-            TextSendMessage(text='終電まで空いている出口一覧です(※絵文字2)')
+            ImagemapSendMessage(
+                base_url = 'https://toilet-map-chan.herokuapp.com/imagemap/{}'.format(urllib.parse.quote_plus(map_image_url)),
+                alt_text = '地図',
+                base_size = BaseSize(height=imagesize, width=imagesize),
+                actions = actions
+            )
+
         ]
     )
 
