@@ -9,9 +9,11 @@ from linebot.models import (
 from PIL import Image, ImageFilter
 from io import BytesIO, StringIO
 import requests
+import json
 import urllib.parse
 import numpy
 import math
+
 
 app = Flask(__name__)
 
@@ -51,25 +53,25 @@ def callback():
     return 'OK'
 
 
-pins = [
-        [35.690810, 139.704500, 'A1'],
-        [35.691321, 139.703438, 'A5'],
-        [35.691074, 139.705056, 'B2'],
-        [35.691172, 139.704962, 'B3'],
-        [35.691209, 139.704300, 'B4'],
-        [35.692279, 139.702208, 'B10'],
-        [35.690521, 139.705810, 'C4'],
-        [35.690621, 139.706777, 'C5'],
-        [35.691267, 139.706879, 'C6'],
-        [35.691502, 139.707242, 'C7'],
-        [35.693777, 139.706166, 'E1'],
-        [35.693143, 139.706104, 'E2'],
-        [35.689273, 139.703907, 'E5'],
-        [35.688629, 139.703212, 'E6'],
-        [35.688497, 139.703397, 'E7'],
-        [35.689831, 139.703384, 'E9'],
-        [35.689421, 139.701877, 'E10'],
-        ]
+# pins = [
+#         [35.690810, 139.704500, 'A1'],
+#         [35.691321, 139.703438, 'A5'],
+#         [35.691074, 139.705056, 'B2'],
+#         [35.691172, 139.704962, 'B3'],
+#         [35.691209, 139.704300, 'B4'],
+#         [35.692279, 139.702208, 'B10'],
+#         [35.690521, 139.705810, 'C4'],
+#         [35.690621, 139.706777, 'C5'],
+#         [35.691267, 139.706879, 'C6'],
+#         [35.691502, 139.707242, 'C7'],
+#         [35.693777, 139.706166, 'E1'],
+#         [35.693143, 139.706104, 'E2'],
+#         [35.689273, 139.703907, 'E5'],
+#         [35.688629, 139.703212, 'E6'],
+#         [35.688497, 139.703397, 'E7'],
+#         [35.689831, 139.703384, 'E9'],
+#         [35.689421, 139.701877, 'E10'],
+#         ]
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -114,6 +116,15 @@ def handle_location(event):
 
     key = 'AIzaSyD_0kx_crEIA5mMLJWnfZN9Fo86Odp4LGY'
 
+    place_map_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&rankby=distance&location={},{}&types=convenience_store&key={}'.format(lat, lon, key)
+    placeJson = requests.get(place_map_url)
+    placeData = json.loads(placeJson.text)
+
+    pins = []
+    for name in placeData["results"]:
+        pins.append([name["geometry"]["location"]["lat"],name["geometry"]["location"]["lng"]])
+
+    
 
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
     map_image_url += '&markers=color:{}|label:{}|{},{}'.format('red', '', lat, lon)
