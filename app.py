@@ -61,6 +61,17 @@ def handle_message(event):
             ]
         )
 
+@app.route("/imagemap/<path:url>/<size>")
+def imagemap(url, size):
+    map_image_url = urllib.parse.unquote(url)
+    response = requests.get(map_image_url)
+    img = Image.open(BytesIO(response.content))
+    img_resize = img.resize((int(size), int(size)))
+    byte_io = BytesIO()
+    img_resize.save(byte_io, 'PNG')
+    byte_io.seek(0)
+    return send_file(byte_io, mimetype='image/png')
+
 
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location(event):
@@ -91,7 +102,7 @@ def handle_location(event):
         event.reply_token,
         [
             ImagemapSendMessage(
-                base_url = 'https://camo.qiitausercontent.com/d45c3a52e65901865edd5215786048572342c553/68747470733a2f2f71696974612d696d6167652d73746f72652e73332e616d617a6f6e6177732e636f6d2f302f3137313731352f36623035653265652d643763342d343531362d393665662d6133653233353834626561632e6a706567',
+                base_url = 'https://toilet-map-chan.herokuapp.com/imagemap/{}'.format(urllib.parse.quote_plus(map_image_url)),
                 alt_text = '地図',
                 base_size = BaseSize(height=imagesize, width=imagesize),
                 actions = actions
