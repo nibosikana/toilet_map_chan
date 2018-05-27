@@ -74,16 +74,11 @@ pins = [
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    if event.message.text.isdigit():
+    if event.message.text.find("のトイレに行きたい！"):
         line_bot_api.reply_message(
             event.reply_token,
             [
-                LocationSendMessage(
-                    title = pins[int(event.message.text)][2],
-                    address = '東京都新宿区',
-                    latitude = pins[int(event.message.text)][0],
-                    longitude = pins[int(event.message.text)][1]
-                )
+                TextSendMessage(text="ここだよ〜")
             ]
         )
     else:
@@ -144,14 +139,14 @@ def handle_location(event):
         x = marker_lat_pixel
         y = marker_lon_pixel
 
-        label = 'T{}'.format(i)
+        label = '{}'.format(i)
 
         if(pin_width / 2 < x < imagesize - pin_width / 2 and pin_height < y < imagesize - pin_width):
 
             map_image_url += '&markers=color:{}|label:{}|{},{}'.format(marker_color, label, pin[0], pin[1])
 
             actions.append(MessageImagemapAction(
-                text='[T{}]のトイレに行きたい！'.format(str(i)),
+                text='[{}]のトイレに行きたい！'.format(str(i)),
                 area = ImagemapArea(
                     x = x - pin_width / 2,
                     y = y - pin_height / 2,
