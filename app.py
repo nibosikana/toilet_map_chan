@@ -8,6 +8,7 @@ from linebot.models import (
 )
 from PIL import Image, ImageFilter
 from io import BytesIO, StringIO
+import requests
 import urllib.parse
 
 app = Flask(__name__)
