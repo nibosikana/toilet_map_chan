@@ -84,7 +84,7 @@ def handle_location(event):
     lat = event.message.latitude
     lon = event.message.longitude
 
-    zoomlevel = 16
+    zoomlevel = 18
     imagesize = 1040
 
     actions = [
@@ -104,6 +104,46 @@ def handle_location(event):
 
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
     map_image_url += '&markers=color:{}|label:{}|{},{}'.format('red', '', lat, lon)
+
+    center_lat_pixel, center_lon_pixel = latlon_to_pixel(lat, lon)
+
+    marker_color = 'red'
+    label = 'E'
+    pin_width = 60 * 1.5
+    pin_height = 84 * 1.5
+
+    actions = []
+    for i, pin in enumerate(pins):
+
+        target_lat_pixel, target_lon_pixel = latlon_to_pixel(pin[0], pin[1])
+
+        # (4)
+        delta_lat_pixel  = (target_lat_pixel - center_lat_pixel) >> (21 - zoomlevel - 1)
+        delta_lon_pixel  = (target_lon_pixel - center_lon_pixel) >> (21 - zoomlevel - 1)
+
+        marker_lat_pixel = imagesize / 2 + delta_lat_pixel
+        marker_lon_pixel = imagesize / 2 + delta_lon_pixel
+
+        x = marker_lat_pixel
+        y = marker_lon_pixel
+
+        if(pin_width / 2 < x < imagesize - pin_width / 2 and pin_height < y < imagesize - pin_width):
+
+            map_image_url += '&markers=color:{}|label:{}|{},{}'.format(marker_color, label, pin[0], pin[1])
+
+            actions.append(MessageImagemapAction(
+                text = str(i),
+                area = ImagemapArea(
+                    x = x - pin_width / 2,
+                    y = y - pin_height / 2,
+                    width = pin_width,
+                    height = pin_height
+                )
+            ))
+            if len(actions) > 10:
+                break
+
+
     line_bot_api.reply_message(
         event.reply_token,
         [
@@ -116,6 +156,14 @@ def handle_location(event):
         ]
     )
 
+# (6)
+offset = 268435456
+radius = offset / numpy.pi
+
+def latlon_to_pixel(lat, lon):
+    lat_pixel = round(offset + radius * lon * numpy.pi / 180)
+    lon_pixel = round(offset - radius * math.log((1 + math.sin(lat * numpy.pi / 180)) / (1 - math.sin(lat * numpy.pi / 180))) / 2)
+    return lat_pixel, lon_pixel
 
 if __name__ == "__main__":
     app.run()
