@@ -149,8 +149,8 @@ def handle_location(event):
 
             map_image_url += '&markers=color:{}|label:{}|{},{}'.format(marker_color, label, pin[0], pin[1])
 
-            actions.append(URIImagemapAction(
-                link_uri='https://twitter.com',
+            actions.append(MessageImagemapAction(
+                text='https://twitter.com',
                 area = ImagemapArea(
                     x = x - pin_width / 2,
                     y = y - pin_height / 2,
