@@ -73,14 +73,17 @@ def callback():
 #         [35.689421, 139.701877, 'E10'],
 #         ]
 
+pins = []
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    if event.message.text.find("のトイレに行きたい！"):
+    if event.message.text.isdigit():
         line_bot_api.reply_message(
             event.reply_token,
             [
-                TextSendMessage(text="ここだよ〜")
+                TextSendMessage(text=pins[int(event.message.text)][0]),
+                TextSendMessage(text=pins[int(event.message.text)][1])
+                
             ]
         )
     else:
@@ -120,11 +123,11 @@ def handle_location(event):
     placeJson = requests.get(place_map_url)
     placeData = json.loads(placeJson.text)
 
-    pins = []
+    
     for name in placeData["results"]:
         pins.append([name["geometry"]["location"]["lat"],name["geometry"]["location"]["lng"]])
 
-    
+
 
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
     map_image_url += '&markers=color:{}|label:{}|{},{}'.format('red', '', lat, lon)
@@ -157,7 +160,7 @@ def handle_location(event):
             map_image_url += '&markers=color:{}|label:{}|{},{}'.format(marker_color, label, pin[0], pin[1])
 
             actions.append(MessageImagemapAction(
-                text='[{}]のトイレに行きたい！'.format(str(i)),
+                text='{}'.format(str(i)),
                 area = ImagemapArea(
                     x = x - pin_width / 2,
                     y = y - pin_height / 2,
