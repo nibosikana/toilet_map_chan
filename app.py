@@ -98,7 +98,7 @@ def handle_location(event):
     lat = event.message.latitude
     lon = event.message.longitude
 
-    zoomlevel = 21
+    zoomlevel = 18
     imagesize = 1040
 
 
@@ -146,20 +146,21 @@ def handle_location(event):
             if len(actions) > 10:
                 break
 
+    message = ImagemapSendMessage(
+            base_url = 'https://{}/imagemap/{}'.format(request.host, urllib.parse.quote_plus(map_image_url)),
+            alt_text = '地図',
+            base_size = BaseSize(height=imagesize, width=imagesize),
+            actions = actions
+        )
 
     line_bot_api.reply_message(
         event.reply_token,
         [
-            ImagemapSendMessage(
-                base_url = 'https://toilet-map-chan.herokuapp.com/imagemap/{}'.format(urllib.parse.quote_plus(map_image_url)),
-                alt_text = '地図',
-                base_size = BaseSize(height=imagesize, width=imagesize),
-                actions = actions
-            )
+            message,
+            TextSendMessage(text='ピンをタップすると詳細が送られるよ！')
         ]
     )
 
-# (6)
 offset = 268435456
 radius = offset / numpy.pi
 
