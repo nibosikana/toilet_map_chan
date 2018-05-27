@@ -56,17 +56,17 @@ def callback():
 
 
 
-# @app.route("/imagemap/<path:url>/<size>")
-# def imagemap(url, size):
+@app.route("/imagemap/<path:url>/<size>")
+def imagemap(url, size):
     
-#     map_image_url = urllib.parse.unquote(url)
-#     response = requests.get(map_image_url)
-#     img = Image.open(BytesIO(response.content))
-#     img_resize = img.resize((int(size), int(size)))
-#     byte_io = BytesIO()
-#     img_resize.save(byte_io, 'PNG')
-#     byte_io.seek(0)
-#     return send_file(byte_io, mimetype='image/png')
+    map_image_url = urllib.parse.unquote(url)
+    response = requests.get(map_image_url)
+    img = Image.open(BytesIO(response.content))
+    img_resize = img.resize((int(size), int(size)))
+    byte_io = BytesIO()
+    img_resize.save(byte_io, 'PNG')
+    byte_io.seek(0)
+    return send_file(byte_io, mimetype='image/png')
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -110,12 +110,13 @@ def handle_location(event):
     line_bot_api.reply_message(
         event.reply_token,
         [
-            ImagemapSendMessage(
-                base_url = 'https://toilet-map-chan.herokuapp.com/imagemap/{}'.format(urllib.parse.quote_plus(map_image_url)),
-                alt_text = '地図',
-                base_size = BaseSize(height=imagesize, width=imagesize),
-                actions = actions
-            )
+            # ImagemapSendMessage(
+            #     base_url = 'https://toilet-map-chan.herokuapp.com/imagemap/{}'.format(urllib.parse.quote_plus(map_image_url)),
+            #     alt_text = '地図',
+            #     base_size = BaseSize(height=imagesize, width=imagesize),
+            #     actions = actions
+            # )
+            TextSendMessage(text='位置情報を送ると近くで終電まで空いている駅一覧を教えるよ(0x100079)')
 
         ]
     )
