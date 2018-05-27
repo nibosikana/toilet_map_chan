@@ -1,6 +1,6 @@
 import os
 import sys
-from flask import Flask, request, abort
+from flask import Flask, request, abort, send_file
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -11,6 +11,11 @@ from linebot.exceptions import (
 from linebot.models import (
     MessageEvent, TextMessage, LocationMessage, TextSendMessage, ImageSendMessage, ImagemapSendMessage, BaseSize, MessageImagemapAction, ImagemapArea
 )
+
+from io import BytesIO, StringIO
+from PIL import Image
+import requests
+import urllib.parse
 
 app = Flask(__name__)
 
