@@ -48,6 +48,11 @@ def callback():
 
     return 'OK'
 
+    pins = [
+        [35.690810, 139.704500, 'A1'],
+        [35.689421, 139.701877, 'E10'],
+        ]
+
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
@@ -98,6 +103,7 @@ def handle_location(event):
 
 
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
+    map_image_url += '&markers=color:{}|label:{}|{},{}'.format('red', '', lat, lon)
     line_bot_api.reply_message(
         event.reply_token,
         [
