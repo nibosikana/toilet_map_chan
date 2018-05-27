@@ -56,17 +56,17 @@ def callback():
 
 
 
-@app.route("/imagemap/<path:url>/<size>")
-def imagemap(url, size):
+# @app.route("/imagemap/<path:url>/<size>")
+# def imagemap(url, size):
     
-    map_image_url = urllib.parse.unquote(url)
-    response = requests.get(map_image_url)
-    img = Image.open(BytesIO(response.content))
-    img_resize = img.resize((int(size), int(size)))
-    byte_io = BytesIO()
-    img_resize.save(byte_io, 'PNG')
-    byte_io.seek(0)
-    return send_file(byte_io, mimetype='image/png')
+#     map_image_url = urllib.parse.unquote(url)
+#     response = requests.get(map_image_url)
+#     img = Image.open(BytesIO(response.content))
+#     img_resize = img.resize((int(size), int(size)))
+#     byte_io = BytesIO()
+#     img_resize.save(byte_io, 'PNG')
+#     byte_io.seek(0)
+#     return send_file(byte_io, mimetype='image/png')
 
 
 @handler.add(MessageEvent, message=TextMessage)
