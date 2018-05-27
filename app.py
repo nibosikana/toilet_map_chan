@@ -51,17 +51,32 @@ def callback():
     return 'OK'
 
 
+pins = [
+    [35.690810, 139.704500, 'A1'],
+    [35.689421, 139.701877, 'E10'],
+    ]
 
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    if event.type == "message":
+    if event.message.text.isdigit():
         line_bot_api.reply_message(
             event.reply_token,
             [
-                TextSendMessage(text='位置情報を送ると近くで終電まで空いている駅一覧を教えるよ(0x100079)'),
+                LocationSendMessage(
+                    title = pins[int(event.message.text)][2],
+                    address = '東京都新宿区',
+                    latitude = pins[int(event.message.text)][0],
+                    longitude = pins[int(event.message.text)][1]
+                )
+            ]
+        )
+    else:
+        line_bot_api.reply_message(
+            event.reply_token,
+            [
+                TextSendMessage(text='位置情報を送ると近くで終電まで空いている駅一覧を教えるよ(※絵文字1) '),
                 TextSendMessage(text='line://nv/location'),
-                TextSendMessage(text='{}'.format(event.message.text))
             ]
         )
 
@@ -97,10 +112,9 @@ def handle_location(event):
         )
     )]
 
-    pins = [
-        [35.690810, 139.704500, 'A1'],
-        [35.689421, 139.701877, 'E10'],
-        ]
+
+
+
 
     key = 'AIzaSyD_0kx_crEIA5mMLJWnfZN9Fo86Odp4LGY'
 
@@ -110,8 +124,8 @@ def handle_location(event):
 
     center_lat_pixel, center_lon_pixel = latlon_to_pixel(lat, lon)
 
-    marker_color = 'red'
-    label = 'E'
+    marker_color = 'blue'
+    label = 'T'
     pin_width = 60 * 1.5
     pin_height = 84 * 1.5
 
