@@ -4,7 +4,7 @@ from flask import Flask, request, abort, send_file
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
-    MessageEvent, TextMessage, LocationMessage, LocationSendMessage,TextSendMessage, StickerSendMessage, MessageImagemapAction, ImagemapArea, ImagemapSendMessage, BaseSize
+    MessageEvent, TextMessage, LocationMessage, LocationSendMessage,TextSendMessage, StickerSendMessage, MessageImagemapAction, ImagemapArea, ImagemapSendMessage, BaseSize, URIImagemapAction
 )
 from PIL import Image, ImageFilter
 from io import BytesIO, StringIO
@@ -149,8 +149,8 @@ def handle_location(event):
 
             map_image_url += '&markers=color:{}|label:{}|{},{}'.format(marker_color, label, pin[0], pin[1])
 
-            actions.append(MessageImagemapAction(
-                text = str(i),
+            actions.append(URIImagemapAction(
+                link_uri='https://twitter.com',
                 area = ImagemapArea(
                     x = x - pin_width / 2,
                     y = y - pin_height / 2,
