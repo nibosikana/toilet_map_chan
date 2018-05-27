@@ -1,19 +1,14 @@
-import os
 import sys
+import os
 from flask import Flask, request, abort, send_file
-
-from linebot import (
-    LineBotApi, WebhookHandler
-)
-from linebot.exceptions import (
-    InvalidSignatureError
-)
+from linebot import LineBotApi, WebhookHandler
+from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
-    MessageEvent, TextMessage, LocationMessage, TextSendMessage, ImageSendMessage, ImagemapSendMessage, BaseSize, MessageImagemapAction, ImagemapArea
+    MessageEvent, TextMessage, LocationMessage, LocationSendMessage,TextSendMessage, StickerSendMessage, MessageImagemapAction, ImagemapArea, ImagemapSendMessage, BaseSize
 )
-
-from io import BytesIO
-from PIL import Image, ImageFilter
+from io import BytesIO, StringIO
+from PIL import Image
+import requests
 import urllib.parse
 
 app = Flask(__name__)
