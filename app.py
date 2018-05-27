@@ -82,44 +82,7 @@ def handle_message(event):
         )
 
 
-@handler.add(MessageEvent, message=LocationMessage)
-def handle_location(event):
 
-    lat = event.message.latitude
-    lon = event.message.longitude
-
-    zoomlevel = 16
-    imagesize = 1040
-
-    # actions = [
-    #     MessageImagemapAction(
-    #         text = "位置情報教えて！",
-    #         area = ImagemapArea(
-    #             x = 0,
-    #             y = 0,
-    #             width = 1040,
-    #             height = 1040
-    #     )
-    # )]
-
-
-    key = 'AIzaSyD_0kx_crEIA5mMLJWnfZN9Fo86Odp4LGY'
-
-
-    map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
-    line_bot_api.reply_message(
-        event.reply_token,
-        [
-            # ImagemapSendMessage(
-            #     base_url = 'https://toilet-map-chan.herokuapp.com/imagemap/{}'.format(urllib.parse.quote_plus(map_image_url)),
-            #     alt_text = '地図',
-            #     base_size = BaseSize(height=imagesize, width=imagesize),
-            #     actions = actions
-            # )
-            TextSendMessage(text='位置情報を送ると近くで終電まで空いている駅一覧を教えるよ(0x100079)')
-
-        ]
-    )
 
 
 if __name__ == "__main__":
