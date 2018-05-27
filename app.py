@@ -10,6 +10,8 @@ from PIL import Image, ImageFilter
 from io import BytesIO, StringIO
 import requests
 import urllib.parse
+import numpy
+import math
 
 app = Flask(__name__)
 
