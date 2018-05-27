@@ -82,7 +82,9 @@ def handle_message(event):
             event.reply_token,
             [
                 TextSendMessage(text=pins[int(event.message.text)][0]),
-                TextSendMessage(text=pins[int(event.message.text)][1])
+                TextSendMessage(text=pins[int(event.message.text)][1]),
+                TextSendMessage(text="ピン")
+                
                 
             ]
         )
