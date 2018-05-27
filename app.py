@@ -98,22 +98,8 @@ def handle_location(event):
     lat = event.message.latitude
     lon = event.message.longitude
 
-    zoomlevel = 18
+    zoomlevel = 21
     imagesize = 1040
-
-    actions = [
-        MessageImagemapAction(
-            text = "位置情報教えて！",
-            area = ImagemapArea(
-                x = 0,
-                y = 0,
-                width = 1040,
-                height = 1040
-        )
-    )]
-
-
-
 
 
     key = 'AIzaSyD_0kx_crEIA5mMLJWnfZN9Fo86Odp4LGY'
