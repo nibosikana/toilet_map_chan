@@ -12,9 +12,8 @@ from linebot.models import (
     MessageEvent, TextMessage, LocationMessage, TextSendMessage, ImageSendMessage, ImagemapSendMessage, BaseSize, MessageImagemapAction, ImagemapArea
 )
 
-from io import BytesIO, StringIO
-from PIL import Image
-import requests
+from io import BytesIO
+from PIL import Image, ImageFilter
 import urllib.parse
 
 app = Flask(__name__)
