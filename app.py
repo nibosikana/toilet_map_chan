@@ -50,10 +50,7 @@ def callback():
 
     return 'OK'
 
-    pins = [
-        [35.690810, 139.704500, 'A1'],
-        [35.689421, 139.701877, 'E10'],
-        ]
+
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -100,6 +97,10 @@ def handle_location(event):
         )
     )]
 
+    pins = [
+        [35.690810, 139.704500, 'A1'],
+        [35.689421, 139.701877, 'E10'],
+        ]
 
     key = 'AIzaSyD_0kx_crEIA5mMLJWnfZN9Fo86Odp4LGY'
 
