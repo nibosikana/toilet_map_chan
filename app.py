@@ -122,7 +122,7 @@ def handle_location(event):
     placeJson_toilet = requests.get(place_map_url_toilet)
     placeData_toilet = json.loads(placeJson_toilet.text)
 
-    #for name in placeData["results"][0:9]:
+    pins.clear()
     for store in placeData_convenience["results"][:6]:
         pins.append([store["geometry"]["location"]["lat"], store["geometry"]["location"]["lng"], store["name"], store["vicinity"]])
     
