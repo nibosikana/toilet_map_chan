@@ -31,7 +31,6 @@ if channel_access_token is None:
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
-pins = []
 
 @app.route("/")
 def hello_world():
@@ -79,7 +78,7 @@ def callback():
 #         [35.689421, 139.701877, 'E10'],
 #         ]
 
-
+pins = []
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -128,8 +127,6 @@ def handle_location(event):
 
     zoomlevel = 18
     imagesize = 1040
-
-    pins = []
 
     key = os.environ['GOOGLE_API_KEY']
     #types = 'convenience_store'
