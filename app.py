@@ -83,6 +83,7 @@ def handle_message(event):
             [
                 TextSendMessage(text=pins[int(event.message.text)][0]),
                 TextSendMessage(text=pins[int(event.message.text)][1]),
+                TextSendMessage(text=pins[int(event.message.text)][2]),                
                 TextSendMessage(text="ピン")
             ]
         )
