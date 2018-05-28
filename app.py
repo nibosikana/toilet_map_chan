@@ -60,7 +60,7 @@ def callback():
 
 
 
-#pins = []
+pins = []
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -70,12 +70,12 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             [
-                # LocationSendMessage(
-                #       title = pins[int(event.message.text)][2],
-                #       address = pins[int(event.message.text)][3],
-                #       latitude = pins[int(event.message.text)][0],
-                #       longitude = pins[int(event.message.text)][1]
-                # )
+                LocationSendMessage(
+                      title = pins[int(event.message.text)][2],
+                      address = pins[int(event.message.text)][3],
+                      latitude = pins[int(event.message.text)][0],
+                      longitude = pins[int(event.message.text)][1]
+                ),
                 TextSendMessage(text="ここだよ")
             ]
         )
@@ -128,7 +128,7 @@ def handle_location(event):
     lat = event.message.latitude
     lon = event.message.longitude
 
-    zoomlevel = 18
+    zoomlevel = 21
     imagesize = 1040
 
     key = os.environ['GOOGLE_API_KEY']
