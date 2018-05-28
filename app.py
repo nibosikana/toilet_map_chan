@@ -112,9 +112,9 @@ def handle_location(event):
     imagesize = 1040
 
     key = os.environ['GOOGLE_API_KEY']
-    #types = 'convenience_store'
-    types = 'restaurant'
-    place_map_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&radius=40&location={},{}&types={}&key={}'.format(lat, lon, types, key)
+    types = 'convenience_store'
+    #types = 'restaurant'
+    place_map_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&language=ja&radius=50&location={},{}&types={}&key={}'.format(lat, lon, types, key)
     placeJson = requests.get(place_map_url)
     placeData = json.loads(placeJson.text)
 
