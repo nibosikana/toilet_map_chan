@@ -82,6 +82,7 @@ pins = []
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text.isdigit():
+        print(pins)
         line_bot_api.reply_message(
             event.reply_token,
             [
@@ -135,7 +136,7 @@ def handle_location(event):
 
     
     for name in placeData["results"]:
-        pins.append([name["geometry"]["location"]["lat"], name["geometry"]["location"]["lng"], name["name"], name["vicinity"]])
+        pins.append([name["geometry"]["location"]["lat"], name["geometry"]["location"]["lng"]])
 
     
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
