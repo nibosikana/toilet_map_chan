@@ -127,7 +127,7 @@ def handle_location(event):
     lat = event.message.latitude
     lon = event.message.longitude
 
-    zoomlevel = 21
+    zoomlevel = 18
     imagesize = 1040
 
     key = os.environ['GOOGLE_API_KEY']
