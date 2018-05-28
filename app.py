@@ -104,7 +104,7 @@ def imagemap(url, size):
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location(event):
 
-    pins = []    
+    pinsList = []    
 
     # pins = [
     #     [35.690810, 139.704500, 'A1'],
@@ -141,8 +141,8 @@ def handle_location(event):
     placeData = json.loads(placeJson.text)
 
     for name in placeData["results"]:
-        pins.append([name["geometry"]["location"]["lat"], name["geometry"]["location"]["lng"]])
-
+        pinsList.append([name["geometry"]["location"]["lat"], name["geometry"]["location"]["lng"], name["name"], name["vicinity"]])
+    pins = pinsList[:9]
     print(pins)
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
     map_image_url += '&markers=color:{}|label:{}|{},{}'.format('red', '', lat, lon)
