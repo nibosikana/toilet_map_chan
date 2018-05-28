@@ -66,7 +66,7 @@ pins = []
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text.isdigit():
-        #print(pins)
+        print(pins)
         line_bot_api.reply_message(
             event.reply_token,
             [
@@ -76,7 +76,7 @@ def handle_message(event):
                       latitude = pins[int(event.message.text)][0],
                       longitude = pins[int(event.message.text)][1]
                 ),
-                TextSendMessage(text="ここだよ")
+                TextSendMessage(text="↑をタップすると詳細が表示されるよ！")
             ]
         )
     else:
@@ -90,7 +90,7 @@ def handle_message(event):
 
 @app.route("/imagemap/<path:url>/<size>")
 def imagemap(url, size):
-    #print(pins)
+    print(pins)
     map_image_url = urllib.parse.unquote(url)
     response = requests.get(map_image_url)
     img = Image.open(BytesIO(response.content))
@@ -105,25 +105,6 @@ def imagemap(url, size):
 def handle_location(event):
 
 
-    # pins = [
-    #     [35.690810, 139.704500, 'A1'],
-    #     [35.691321, 139.703438, 'A5'],
-    #     [35.691074, 139.705056, 'B2'],
-    #     [35.691172, 139.704962, 'B3'],
-    #     [35.691209, 139.704300, 'B4'],
-    #     [35.692279, 139.702208, 'B10'],
-    #     [35.690521, 139.705810, 'C4'],
-    #     [35.690621, 139.706777, 'C5'],
-    #     [35.691267, 139.706879, 'C6'],
-    #     [35.691502, 139.707242, 'C7'],
-    #     [35.693777, 139.706166, 'E1'],
-    #     [35.693143, 139.706104, 'E2'],
-    #     [35.689273, 139.703907, 'E5'],
-    #     [35.688629, 139.703212, 'E6'],
-    #     [35.688497, 139.703397, 'E7'],
-    #     [35.689831, 139.703384, 'E9'],
-    #     [35.689421, 139.701877, 'E10'],
-    #     ]
     lat = event.message.latitude
     lon = event.message.longitude
 
@@ -131,10 +112,7 @@ def handle_location(event):
     imagesize = 1040
 
     key = os.environ['GOOGLE_API_KEY']
-    #types = 'convenience_store'
-
-
-    types = 'restaurant'
+    types = 'convenience_store'
     place_map_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&rankby=distance&location={},{}&types={}&key={}'.format(lat, lon, types, key)
     placeJson = requests.get(place_map_url)
     placeData = json.loads(placeJson.text)
@@ -190,7 +168,7 @@ def handle_location(event):
         event.reply_token,
         [
             ImagemapSendMessage(base_url = 'https://{}/imagemap/{}'.format(request.host, urllib.parse.quote_plus(map_image_url)),alt_text = '地図',base_size = BaseSize(height=imagesize, width=imagesize),actions = actions),
-            TextSendMessage(text='ピンをタップすると詳細が送られるよ！')
+            TextSendMessage(text='ピンをタップするかピンの番号を入力すると詳細が送られるよ！')
         ]
     )
 
