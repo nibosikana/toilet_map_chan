@@ -113,14 +113,21 @@ def handle_location(event):
 
     key = os.environ['GOOGLE_API_KEY']
     types = 'convenience_store'
-    #types = 'restaurant'
-    place_map_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&language=ja&radius=50&location={},{}&types={}&key={}'.format(lat, lon, types, key)
-    placeJson = requests.get(place_map_url)
-    placeData = json.loads(placeJson.text)
+    query = 'トイレ'
+    place_map_url_convenience = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&language=ja&radius=50&location={},{}&types={}&key={}'.format(lat, lon, types, key)
+    placeJson_convenience = requests.get(place_map_url_convenience)
+    placeData_convenience = json.loads(placeJson_convenience.text)
+
+    place_map_url_toilet = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&language=ja&radius=50&location={},{}&query={}&key={}'.format(lat, lon, query, key)
+    placeJson_toilet = requests.get(place_map_url_toilet)
+    placeData_toilet = json.loads(placeJson_toilet.text)
 
     #for name in placeData["results"][0:9]:
-    for name in placeData["results"]:
-        pins.append([name["geometry"]["location"]["lat"], name["geometry"]["location"]["lng"], name["name"], name["vicinity"]])
+    for store in placeData_convenience["results"][:6]:
+        pins.append([store["geometry"]["location"]["lat"], store["geometry"]["location"]["lng"], store["name"], store["vicinity"]])
+    
+    for toilet in placeData_toilet["results"][:6]:
+        pins.append([toilet["geometry"]["location"]["lat"], toilet["geometry"]["location"]["lng"], toilet["name"], toilet["vicinity"]])
     print(pins)
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
     map_image_url += '&markers=color:{}|label:{}|{},{}'.format('red', '', lat, lon)
