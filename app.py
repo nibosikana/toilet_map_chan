@@ -108,7 +108,7 @@ def handle_message(event):
 
 @app.route("/imagemap/<path:url>/<size>")
 def imagemap(url, size):
-    print(pins)
+    #print(pins)
     map_image_url = urllib.parse.unquote(url)
     response = requests.get(map_image_url)
     img = Image.open(BytesIO(response.content))
