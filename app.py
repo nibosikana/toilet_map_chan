@@ -81,11 +81,10 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             [
+                TextSendMessage(text=pins),
                 TextSendMessage(text=pins[int(event.message.text)][0]),
                 TextSendMessage(text=pins[int(event.message.text)][1]),
                 TextSendMessage(text="ピン")
-                
-                
             ]
         )
     else:
@@ -162,7 +161,7 @@ def handle_location(event):
             map_image_url += '&markers=color:{}|label:{}|{},{}'.format(marker_color, label, pin[0], pin[1])
 
             actions.append(MessageImagemapAction(
-                text='{}'.format(str(i)),
+                text=str(i),
                 area = ImagemapArea(
                     x = x - pin_width / 2,
                     y = y - pin_height / 2,
