@@ -113,11 +113,12 @@ def handle_location(event):
 
     key = os.environ['GOOGLE_API_KEY']
     types = 'convenience_store'
-    place_map_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&rankby=distance&location={},{}&types={}&key={}'.format(lat, lon, types, key)
+    place_map_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&radius=200&location={},{}&types={}&key={}'.format(lat, lon, types, key)
     placeJson = requests.get(place_map_url)
     placeData = json.loads(placeJson.text)
 
-    for name in placeData["results"][0:9]:
+    #for name in placeData["results"][0:9]:
+    for name in placeData["results"]:
         pins.append([name["geometry"]["location"]["lat"], name["geometry"]["location"]["lng"], name["name"], name["vicinity"]])
     print(pins)
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
@@ -144,7 +145,7 @@ def handle_location(event):
         x = marker_lat_pixel
         y = marker_lon_pixel
 
-        label = i
+        label = str(i)
 
         if(pin_width / 2 < x < imagesize - pin_width / 2 and pin_height < y < imagesize - pin_width):
 
