@@ -104,27 +104,27 @@ def imagemap(url, size):
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location(event):
 
-    #pins = []    
+    pins = []    
 
-    pins = [
-        [35.690810, 139.704500, 'A1'],
-        [35.691321, 139.703438, 'A5'],
-        [35.691074, 139.705056, 'B2'],
-        [35.691172, 139.704962, 'B3'],
-        [35.691209, 139.704300, 'B4'],
-        [35.692279, 139.702208, 'B10'],
-        [35.690521, 139.705810, 'C4'],
-        [35.690621, 139.706777, 'C5'],
-        [35.691267, 139.706879, 'C6'],
-        [35.691502, 139.707242, 'C7'],
-        [35.693777, 139.706166, 'E1'],
-        [35.693143, 139.706104, 'E2'],
-        [35.689273, 139.703907, 'E5'],
-        [35.688629, 139.703212, 'E6'],
-        [35.688497, 139.703397, 'E7'],
-        [35.689831, 139.703384, 'E9'],
-        [35.689421, 139.701877, 'E10'],
-        ]
+    # pins = [
+    #     [35.690810, 139.704500, 'A1'],
+    #     [35.691321, 139.703438, 'A5'],
+    #     [35.691074, 139.705056, 'B2'],
+    #     [35.691172, 139.704962, 'B3'],
+    #     [35.691209, 139.704300, 'B4'],
+    #     [35.692279, 139.702208, 'B10'],
+    #     [35.690521, 139.705810, 'C4'],
+    #     [35.690621, 139.706777, 'C5'],
+    #     [35.691267, 139.706879, 'C6'],
+    #     [35.691502, 139.707242, 'C7'],
+    #     [35.693777, 139.706166, 'E1'],
+    #     [35.693143, 139.706104, 'E2'],
+    #     [35.689273, 139.703907, 'E5'],
+    #     [35.688629, 139.703212, 'E6'],
+    #     [35.688497, 139.703397, 'E7'],
+    #     [35.689831, 139.703384, 'E9'],
+    #     [35.689421, 139.701877, 'E10'],
+    #     ]
     lat = event.message.latitude
     lon = event.message.longitude
 
@@ -140,8 +140,8 @@ def handle_location(event):
     placeJson = requests.get(place_map_url)
     placeData = json.loads(placeJson.text)
 
-    # for name in placeData["results"]:
-    #     pins.append([name["geometry"]["location"]["lat"], name["geometry"]["location"]["lng"], name["name"], name["vicinity"]])
+    for name in placeData["results"]:
+        pins.append([name["geometry"]["location"]["lat"], name["geometry"]["location"]["lng"]])
 
     print(pins)
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
