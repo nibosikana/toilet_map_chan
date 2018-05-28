@@ -78,14 +78,15 @@ pins = []
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text.isdigit():
-        print(pins)
         line_bot_api.reply_message(
             event.reply_token,
             [
-                TextSendMessage(text=pins[int(event.message.text)][0]),
-                TextSendMessage(text=pins[int(event.message.text)][1]),
-                TextSendMessage(text=pins[int(event.message.text)][2]),                
-                TextSendMessage(text="ピン")
+                LocationSendMessage(
+                      title = pins[int(event.message.text)][2],
+                      address = pins[int(event.message.text)][3],
+                      latitude = pins[int(event.message.text)][0],
+                      longitude = pins[int(event.message.text)][1]
+                )
             ]
         )
     else:
@@ -122,15 +123,15 @@ def handle_location(event):
     key = os.environ['GOOGLE_API_KEY']
     #types = 'convenience_store'
     types = 'restaurant'
-    place_map_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&rankby=distance&location={},{}&types=restaurant&key={}'.format(lat, lon, key)
+    place_map_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&rankby=distance&location={},{}&types={}&key={}'.format(lat, types, lon, key)
     placeJson = requests.get(place_map_url)
     placeData = json.loads(placeJson.text)
 
     
     for name in placeData["results"]:
-        pins.append([name["geometry"]["location"]["lat"], name["geometry"]["location"]["lng"], name["name"]])
+        pins.append([name["geometry"]["location"]["lat"], name["geometry"]["location"]["lng"], name["name"], name["vicinity"]])
 
-
+    print(pins)
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
     map_image_url += '&markers=color:{}|label:{}|{},{}'.format('red', '', lat, lon)
 
@@ -162,7 +163,7 @@ def handle_location(event):
             map_image_url += '&markers=color:{}|label:{}|{},{}'.format(marker_color, label, pin[0], pin[1])
 
             actions.append(MessageImagemapAction(
-                text=str(i),
+                text=i,
                 area = ImagemapArea(
                     x = x - pin_width / 2,
                     y = y - pin_height / 2,
