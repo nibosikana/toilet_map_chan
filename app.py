@@ -122,6 +122,8 @@ def imagemap(url, size):
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location(event):
 
+    pins = []    
+
     lat = event.message.latitude
     lon = event.message.longitude
 
@@ -131,10 +133,9 @@ def handle_location(event):
     key = os.environ['GOOGLE_API_KEY']
     #types = 'convenience_store'
 
-    pins = []
 
     types = 'restaurant'
-    place_map_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&rankby=distance&location={},{}&types={}&key={}'.format(lat, types, lon, key)
+    place_map_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&rankby=distance&location={},{}&types={}&key={}'.format(lat, lon, types, key)
     placeJson = requests.get(place_map_url)
     placeData = json.loads(placeJson.text)
 
