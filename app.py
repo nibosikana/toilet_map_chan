@@ -82,16 +82,17 @@ pins = []
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text.isdigit():
-        print(pins)        
         line_bot_api.reply_message(
             event.reply_token,
             [
-                LocationSendMessage(
-                      title = pins[int(event.message.text)][2],
-                      address = pins[int(event.message.text)][3],
-                      latitude = pins[int(event.message.text)][0],
-                      longitude = pins[int(event.message.text)][1]
-                )
+                # LocationSendMessage(
+                #       title = pins[int(event.message.text)][2],
+                #       address = pins[int(event.message.text)][3],
+                #       latitude = pins[int(event.message.text)][0],
+                #       longitude = pins[int(event.message.text)][1]
+                # )
+                TextSendMessage(text=pins[int(event.message.text)][0]),
+                TextSendMessage(text=pins[int(event.message.text)][1])
             ]
         )
     else:
