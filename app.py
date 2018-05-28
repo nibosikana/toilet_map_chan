@@ -92,8 +92,7 @@ def handle_message(event):
                 #       latitude = pins[int(event.message.text)][0],
                 #       longitude = pins[int(event.message.text)][1]
                 # )
-                TextSendMessage(text=pins[int(event.message.text)][0]),
-                TextSendMessage(text=pins[int(event.message.text)][1])
+                TextSendMessage(text="ここだよ")
             ]
         )
     else:
@@ -136,7 +135,7 @@ def handle_location(event):
 
     
     for name in placeData["results"]:
-        pins.append([name["geometry"]["location"]["lat"], name["geometry"]["location"]["lng"]])
+        pins.append([name["geometry"]["location"]["lat"], name["geometry"]["location"]["lng"], name["name"], name["vicinity"]])
 
     
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
