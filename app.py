@@ -119,8 +119,11 @@ def imagemap(url, size):
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location(event):
 
-    lat = event.message.latitude
-    lon = event.message.longitude
+    # lat = event.message.latitude
+    # lon = event.message.longitude
+
+    lat = 35.690810
+    lon = 139.704500
 
     zoomlevel = 18
     imagesize = 1040
@@ -137,7 +140,7 @@ def handle_location(event):
     for name in placeData["results"]:
         pins.append([name["geometry"]["location"]["lat"], name["geometry"]["location"]["lng"], name["name"], name["vicinity"]])
 
-    
+    print(pins)
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
     map_image_url += '&markers=color:{}|label:{}|{},{}'.format('red', '', lat, lon)
 
@@ -162,14 +165,14 @@ def handle_location(event):
         x = marker_lat_pixel
         y = marker_lon_pixel
 
-        label = '{}'.format(i)
+        label = i
 
         if(pin_width / 2 < x < imagesize - pin_width / 2 and pin_height < y < imagesize - pin_width):
 
             map_image_url += '&markers=color:{}|label:{}|{},{}'.format(marker_color, label, pin[0], pin[1])
 
             actions.append(MessageImagemapAction(
-                text=i,
+                text=str(i),
                 area = ImagemapArea(
                     x = x - pin_width / 2,
                     y = y - pin_height / 2,
