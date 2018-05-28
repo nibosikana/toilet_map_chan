@@ -81,7 +81,6 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             [
-                TextSendMessage(text=pins),
                 TextSendMessage(text=pins[int(event.message.text)][0]),
                 TextSendMessage(text=pins[int(event.message.text)][1]),
                 TextSendMessage(text="ピン")
@@ -118,7 +117,7 @@ def handle_location(event):
     imagesize = 1040
 
 
-    key = 'AIzaSyD_0kx_crEIA5mMLJWnfZN9Fo86Odp4LGY'
+    key = os.environ['GOOGLE_API_KEY']
 
     place_map_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&rankby=distance&location={},{}&types=convenience_store&key={}'.format(lat, lon, key)
     placeJson = requests.get(place_map_url)
