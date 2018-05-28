@@ -126,7 +126,7 @@ def handle_location(event):
 
     
     for name in placeData["results"]:
-        pins.append([name["geometry"]["location"]["lat"],name["geometry"]["location"]["lng"]])
+        pins.append([name["name"], name["geometry"]["location"]["lat"], name["geometry"]["location"]["lng"]])
 
 
 
