@@ -33,6 +33,9 @@ handler = WebhookHandler(channel_secret)
 
 @app.route("/")
 def hello_world():
+    print(pins)
+
+    
     return "hello world!"
 
 @app.route("/callback", methods=['POST'])
@@ -75,11 +78,12 @@ def callback():
 
 pins = []
 
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text.isdigit():
+        print(pins)        
         line_bot_api.reply_message(
-            print(pins)
             event.reply_token,
             [
                 LocationSendMessage(
