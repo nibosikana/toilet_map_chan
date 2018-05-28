@@ -190,12 +190,7 @@ def handle_location(event):
     line_bot_api.reply_message(
         event.reply_token,
         [
-            ImagemapSendMessage(
-            base_url = 'https://{}/imagemap/{}'.format(request.host, urllib.parse.quote_plus(map_image_url)),
-            alt_text = '地図',
-            base_size = BaseSize(height=imagesize, width=imagesize),
-            actions = actions
-            ),
+            ImagemapSendMessage(base_url = 'https://{}/imagemap/{}'.format(request.host, urllib.parse.quote_plus(map_image_url)),alt_text = '地図',base_size = BaseSize(height=imagesize, width=imagesize),actions = actions),
             TextSendMessage(text='ピンをタップすると詳細が送られるよ！')
         ]
     )
