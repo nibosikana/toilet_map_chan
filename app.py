@@ -83,8 +83,8 @@ def handle_message(event):
         line_bot_api.reply_message(
             event.reply_token,
             [
-                TextSendMessage(text='位置情報を送ると近くで終電まで空いている駅一覧を教えるよ(※絵文字1) '),
                 TextSendMessage(text='line://nv/location'),
+                TextSendMessage(text='現在地を教えてくれたら近くのトイレを探すよ！')
             ]
         )
 
@@ -112,8 +112,9 @@ def handle_location(event):
     imagesize = 1040
 
     key = os.environ['GOOGLE_API_KEY']
-    types = 'convenience_store'
-    place_map_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&radius=200&location={},{}&types={}&key={}'.format(lat, lon, types, key)
+    #types = 'convenience_store'
+    types = 'restaurant'
+    place_map_url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?&radius=150&location={},{}&types={}&key={}'.format(lat, lon, types, key)
     placeJson = requests.get(place_map_url)
     placeData = json.loads(placeJson.text)
 
