@@ -119,11 +119,8 @@ def imagemap(url, size):
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location(event):
 
-    # lat = event.message.latitude
-    # lon = event.message.longitude
-
-    lat = 35.690810
-    lon = 139.704500
+    lat = event.message.latitude
+    lon = event.message.longitude
 
     zoomlevel = 18
     imagesize = 1040
