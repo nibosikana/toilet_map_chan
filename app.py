@@ -7,7 +7,10 @@ from linebot.models import (
     MessageEvent, TextMessage, LocationMessage, LocationSendMessage,TextSendMessage, StickerSendMessage, MessageImagemapAction, ImagemapArea, ImagemapSendMessage, BaseSize, URIImagemapAction
 )
 
-import pymysql
+try:
+    import MySQLdb
+except:
+    import pymysql
 
 
 from PIL import Image, ImageFilter
@@ -128,11 +131,9 @@ def handle_location(event):
         pins.append([toilet["geometry"]["location"]["lat"], toilet["geometry"]["location"]["lng"], toilet["name"], toilet["vicinity"]])
     print(pins)
 
-
+    conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='toilet_map_chan')
+    c = conn.cursor()
     try:
-        conn = pymysql.connect(user='root', password='', host='localhost', db='toilet_map_chan')
-        conn.is_connected()
-        c = conn.cursor()
         sql = "SELECT `id` FROM`"+REMOTE_DB_TB+"` WHERE `user_id` = '"+user_id+"';"
         c.execute(sql)
         ret = c.fetchall()
