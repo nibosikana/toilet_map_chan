@@ -147,8 +147,8 @@ def handle_location(event):
     #     c.execute(sql)
     #     conn.commit()
     # finally:
-        conn.close()
-        c.close()
+    conn.close()
+    c.close()
 
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
     map_image_url += '&markers=color:{}|label:{}|{},{}'.format('red', '', lat, lon)
