@@ -134,7 +134,7 @@ def handle_location(event):
 
 
     try:
-        conn = MySQLdb.connect(user=REMOTE_DB_USER, passwd='', host=REMOTE_HOST, db=REMOTE_DB_NAME)
+        conn = MySQLdb.connect(user=REMOTE_DB_USER, password='', host=REMOTE_HOST, db=REMOTE_DB_NAME)
         c = conn.cursor()
         sql = "SELECT `id` FROM`"+REMOTE_DB_TB+"` WHERE `user_id` = '"+user_id+"';"
         c.execute(sql)
