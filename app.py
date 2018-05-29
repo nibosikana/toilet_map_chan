@@ -131,7 +131,7 @@ def handle_location(event):
         pins.append([toilet["geometry"]["location"]["lat"], toilet["geometry"]["location"]["lng"], toilet["name"], toilet["vicinity"]])
     print(pins)
 
-    conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='toilet_map_chan')
+    conn = MySQLdb.connect(host='127.0.0.1', user='root', passwd='', db='toilet_map_chan')
     c = conn.cursor()
     conn.is_connected()
     # try:
