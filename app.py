@@ -1,12 +1,20 @@
 import sys
 import os
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, request, abort, send_file
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
     MessageEvent, TextMessage, LocationMessage, LocationSendMessage,TextSendMessage, StickerSendMessage, MessageImagemapAction, ImagemapArea, ImagemapSendMessage, BaseSize, URIImagemapAction
 )
+
+try:
+    import MySQLdb
+except:
+    import pymysql
+    pymysql.install_as_MySQLdb()
+    import MySQLdb
+
 from PIL import Image, ImageFilter
 from io import BytesIO, StringIO
 import requests
@@ -24,6 +32,12 @@ db = SQLAlchemy(app)
 channel_secret = os.environ['LINE_CHANNEL_SECRET']
 channel_access_token = os.environ['LINE_CHANNEL_ACCESS_TOKEN']
 
+REMOTE_HOST = os.environ['REMOTE_HOST']
+REMOTE_DB_NAME = os.environ['REMOTE_DB_NAME']
+REMOTE_DB_USER = os.environ['REMOTE_DB_USER']
+REMOTE_DB_PASS = os.environ['REMOTE_DB_PASS']
+REMOTE_DB_TB = os.environ['REMOTE_DB_TB']
+
 if channel_secret is None:
     print('Specify LINE_CHANNEL_SECRET as environment variable.')
     sys.exit(1)
@@ -34,47 +48,24 @@ if channel_access_token is None:
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.text, unique=True)
-    pins = db.Column(db.text, unique=True)
-
-    def __init__(self, user_id, pins):
-        self.user_id = userid
-        self.pins = pins
-
-    def __repr__(self):
-        return '<User %r>' % self.user_id
-
 @app.route("/")
 def hello_world():
-    #print(pins)
-
-    
     return "hello world!"
 
 @app.route("/callback", methods=['POST'])
 def callback():
-    #print(pins)
-    # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
-
-    # get request body as text
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
-
-    # handle webhook body
     try:
         handler.handle(body, signature)
     except InvalidSignatureError:
         abort(400)
-
     return 'OK'
 
 
 
 
-pins = []
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -117,8 +108,10 @@ def imagemap(url, size):
 
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location(event):
-
-
+    
+    user_id = event.source.user_id
+    pins = []
+    
     lat = event.message.latitude
     lon = event.message.longitude
 
@@ -136,14 +129,32 @@ def handle_location(event):
     placeJson_toilet = requests.get(place_map_url_toilet)
     placeData_toilet = json.loads(placeJson_toilet.text)
 
-    pins.clear()
     for store in placeData_convenience["results"][:6]:
         pins.append([store["geometry"]["location"]["lat"], store["geometry"]["location"]["lng"], store["name"], store["vicinity"]])
     
     for toilet in placeData_toilet["results"][:6]:
         pins.append([toilet["geometry"]["location"]["lat"], toilet["geometry"]["location"]["lng"], toilet["name"], toilet["vicinity"]])
     print(pins)
-    
+
+
+    try:
+        conn = MySQLdb.connect(user=REMOTE_DB_USER, passwd=REMOTE_DB_PASS, host=REMOTE_HOST, db=REMOTE_DB_NAME)
+        c = conn.cursor()
+        sql = "SELECT `id` FROM`"+REMOTE_DB_TB+"` WHERE `user_id` = '"+user_id+"';"
+        c.execute(sql)
+        ret = c.fetchall()
+        if len(ret) == 0:
+            sql = "INSERT INTO `"+REMOTE_DB_TB+"` (`user_id`, `pins`)\
+              VALUES ('"+user_id+"', '"+str(pins)+"', 1);"
+        elif len(ret) == 1:
+            sql = "UPDATE `"+REMOTE_DB_TB+"` SET `pins` = '"+str(pins)+"',\
+            `status` = '1' WHERE `user_id` = '"+user_id+"';"
+        c.execute(sql)
+        conn.commit()
+    finally:
+        conn.close()
+        c.close()
+
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
     map_image_url += '&markers=color:{}|label:{}|{},{}'.format('red', '', lat, lon)
 
