@@ -7,12 +7,8 @@ from linebot.models import (
     MessageEvent, TextMessage, LocationMessage, LocationSendMessage,TextSendMessage, StickerSendMessage, MessageImagemapAction, ImagemapArea, ImagemapSendMessage, BaseSize, URIImagemapAction
 )
 
-try:
-    import MySQLdb
-except:
-    import pymysql
-    pymysql.install_as_MySQLdb()
-    import MySQLdb
+import pymysql
+
 
 from PIL import Image, ImageFilter
 from io import BytesIO, StringIO
@@ -134,7 +130,7 @@ def handle_location(event):
 
 
     try:
-        conn = MySQLdb.connect(user='root', password='', host='localhost', db='toilet_map_chan')
+        conn = pymysql.connect(user='root', password='', host='localhost', db='toilet_map_chan')
         conn.is_connected()
         c = conn.cursor()
         sql = "SELECT `id` FROM`"+REMOTE_DB_TB+"` WHERE `user_id` = '"+user_id+"';"
