@@ -68,6 +68,11 @@ def callback():
 def handle_message(event):
     if event.message.text.isdigit():
 
+        conn = MySQLdb.connect(host='127.0.0.1', user='root', passwd='', db='toilet_map_chan')
+        c = conn.cursor()
+        conn.is_connected()
+        conn.close()
+        c.close()
         line_bot_api.reply_message(
             event.reply_token,
             [
@@ -131,9 +136,9 @@ def handle_location(event):
         pins.append([toilet["geometry"]["location"]["lat"], toilet["geometry"]["location"]["lng"], toilet["name"], toilet["vicinity"]])
     print(pins)
 
-    conn = MySQLdb.connect(host='127.0.0.1', user='root', passwd='', db='toilet_map_chan')
-    c = conn.cursor()
-    conn.is_connected()
+    # conn = MySQLdb.connect(host='127.0.0.1', user='root', passwd='', db='toilet_map_chan')
+    # c = conn.cursor()
+    # conn.is_connected()
     # try:
     #     sql = "SELECT `id` FROM`"+REMOTE_DB_TB+"` WHERE `user_id` = '"+user_id+"';"
     #     c.execute(sql)
@@ -147,8 +152,8 @@ def handle_location(event):
     #     c.execute(sql)
     #     conn.commit()
     # finally:
-    conn.close()
-    c.close()
+    # conn.close()
+    # c.close()
 
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
     map_image_url += '&markers=color:{}|label:{}|{},{}'.format('red', '', lat, lon)
