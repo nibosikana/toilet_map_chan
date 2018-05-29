@@ -133,19 +133,20 @@ def handle_location(event):
 
     conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='toilet_map_chan')
     c = conn.cursor()
-    try:
-        sql = "SELECT `id` FROM`"+REMOTE_DB_TB+"` WHERE `user_id` = '"+user_id+"';"
-        c.execute(sql)
-        ret = c.fetchall()
-        if len(ret) == 0:
-            sql = "INSERT INTO `"+REMOTE_DB_TB+"` (`user_id`, `pins`)\
-              VALUES ('"+user_id+"', '"+str(pins)+"', 1);"
-        elif len(ret) == 1:
-            sql = "UPDATE `"+REMOTE_DB_TB+"` SET `pins` = '"+str(pins)+"',\
-            `status` = '1' WHERE `user_id` = '"+user_id+"';"
-        c.execute(sql)
-        conn.commit()
-    finally:
+    conn.is_connected()
+    # try:
+    #     sql = "SELECT `id` FROM`"+REMOTE_DB_TB+"` WHERE `user_id` = '"+user_id+"';"
+    #     c.execute(sql)
+    #     ret = c.fetchall()
+    #     if len(ret) == 0:
+    #         sql = "INSERT INTO `"+REMOTE_DB_TB+"` (`user_id`, `pins`)\
+    #           VALUES ('"+user_id+"', '"+str(pins)+"', 1);"
+    #     elif len(ret) == 1:
+    #         sql = "UPDATE `"+REMOTE_DB_TB+"` SET `pins` = '"+str(pins)+"',\
+    #         `status` = '1' WHERE `user_id` = '"+user_id+"';"
+    #     c.execute(sql)
+    #     conn.commit()
+    # finally:
         conn.close()
         c.close()
 
