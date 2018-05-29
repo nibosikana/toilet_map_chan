@@ -1,5 +1,6 @@
 import sys
 import os
+from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask, request, abort, send_file
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
@@ -16,6 +17,8 @@ import math
 
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+db = SQLAlchemy(app)
 
 # 環境変数からchannel_secret・channel_access_tokenを取得
 channel_secret = os.environ['LINE_CHANNEL_SECRET']
@@ -31,6 +34,17 @@ if channel_access_token is None:
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.text, unique=True)
+    pins = db.Column(db.text, unique=True)
+
+    def __init__(self, user_id, pins):
+        self.user_id = userid
+        self.pins = pins
+
+    def __repr__(self):
+        return '<User %r>' % self.user_id
 
 @app.route("/")
 def hello_world():
@@ -129,6 +143,7 @@ def handle_location(event):
     for toilet in placeData_toilet["results"][:6]:
         pins.append([toilet["geometry"]["location"]["lat"], toilet["geometry"]["location"]["lng"], toilet["name"], toilet["vicinity"]])
     print(pins)
+    
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
     map_image_url += '&markers=color:{}|label:{}|{},{}'.format('red', '', lat, lon)
 
