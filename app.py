@@ -82,11 +82,12 @@ def handle_message(event):
         )
     else:
         try:
-            print('mysqlにログイン')
-            conn = MySQLdb.connect(host='localhost', user='root', passwd='', db='toilet_map_chan')
+            print('mysqlにログイン中')
+            conn = MySQLdb.connect(db='toilet_map_chan', user='root', passwd='')
             c = conn.cursor()
-            conn.is_connected()
+            print('mysqlにログインできた？')
         finally:
+            print('mysql終わり')            
             conn.close()
             c.close()
 
