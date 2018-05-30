@@ -68,11 +68,6 @@ def callback():
 def handle_message(event):
     if event.message.text.isdigit():
 
-        conn = MySQLdb.connect(host='127.0.0.1', user='root', passwd='', db='toilet_map_chan')
-        c = conn.cursor()
-        conn.is_connected()
-        conn.close()
-        c.close()
         line_bot_api.reply_message(
             event.reply_token,
             [
@@ -86,6 +81,12 @@ def handle_message(event):
             ]
         )
     else:
+        print(event.source.user_id)
+        conn = MySQLdb.connect(host='127.0.0.1', user='root', passwd='', db='toilet_map_chan')
+        c = conn.cursor()
+        conn.is_connected()
+        conn.close()
+        c.close()
         line_bot_api.reply_message(
             event.reply_token,
             [
