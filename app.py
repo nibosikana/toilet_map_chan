@@ -87,9 +87,10 @@ def handle_message(event):
             c = conn.cursor()
             print('mysqlにログインできた？')
         finally:
-            print('mysql終わり')            
+            print('mysql終わるかも')
             conn.close()
             c.close()
+            print('mysql終わり!')
 
         line_bot_api.reply_message(
             event.reply_token,
