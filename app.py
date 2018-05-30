@@ -83,7 +83,7 @@ def handle_message(event):
     else:
         try:
             print('mysqlにログイン中')
-            conn = MySQLdb.connect(db='toilet_map_chan', user='root', passwd='')
+            conn = MySQLdb.connect(unix_socket ='/tmp/mysql.sock', db='toilet_map_chan', user='root', passwd='')
             c = conn.cursor()
             print('mysqlにログインできた？')
         finally:
