@@ -83,6 +83,7 @@ def handle_message(event):
                 #       latitude = pins[int(event.message.text)][0],
                 #       longitude = pins[int(event.message.text)][1]
                 # ),
+                TextSendMessage(text=row),
                 TextSendMessage(text="↑をタップすると詳細が表示されるよ！")
                 
             ]
