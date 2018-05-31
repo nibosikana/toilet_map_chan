@@ -127,7 +127,7 @@ def handle_location(event):
     conn = psycopg2.connect("dbname=d3q0cla0odclij host=ec2-54-204-39-46.compute-1.amazonaws.com user=rxaolbfesqhxoq password=b4ff300937ee5449c17df4333d033af45df6ebcc546bb865355c1dd49bd152b5")
     cur = conn.cursor()
     cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins varchar);")
-    cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (user_id, pins))
+    cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (user_id, ['テスト',100]))
     cur.execute("SELECT * FROM users;")
     row = cur.fetchone()
     print(row)
