@@ -7,10 +7,7 @@ from linebot.models import (
     MessageEvent, TextMessage, LocationMessage, LocationSendMessage,TextSendMessage, StickerSendMessage, MessageImagemapAction, ImagemapArea, ImagemapSendMessage, BaseSize, URIImagemapAction
 )
 
-try:
-    import MySQLdb
-except:
-    import pymysql
+import mysql.connector
 
 
 from PIL import Image, ImageFilter
@@ -81,16 +78,17 @@ def handle_message(event):
             ]
         )
     else:
-        try:
-            print('mysqlにログイン中')
-            conn = MySQLdb.connect(unix_socket ='/tmp/mysql.sock', db='toilet_map_chan', user='root', passwd='')
-            c = conn.cursor()
-            print('mysqlにログインできた？')
-        finally:
-            print('mysql終わるかも')
-            conn.close()
-            c.close()
-            print('mysql終わり!')
+        conn = mysql.connect(
+            host = 'localhost',
+            port = 3306,
+            user = 'root',
+            password = '',
+            database = 'toilet_map_chan',
+        )
+        connected = conn.is_connected()
+        print(connected)
+        if (not connected):
+            conn.ping(True)
 
         line_bot_api.reply_message(
             event.reply_token,

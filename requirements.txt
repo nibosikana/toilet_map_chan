@@ -19,3 +19,5 @@ requests==2.18.4
 
 urllib3==1.22
 
+mysql-connector-python==8.0.11
+
