@@ -71,7 +71,7 @@ def handle_message(event):
         cur = conn.cursor()
         cur.execute("SELECT pins FROM users WHERE user_id = 'U14146d611c19d261d47a167d0cadf0d6' ")
         cur.execute("SELECT address FROM users WHERE user_id = 'U14146d611c19d261d47a167d0cadf0d6' ")        
-        row = cur.fetchone()
+        row = cur.fetchall()
         print(row)
         r = row[0][0][0]
         print(r)
