@@ -129,7 +129,7 @@ def handle_location(event):
         pins.append([toilet["geometry"]["location"]["lat"], toilet["geometry"]["location"]["lng"], toilet["name"], toilet["vicinity"]])
     print(pins)
 
-    conn = psycopg2.connect("dbname=" + dbname + ",host=" + host + ",user=" + user + ",password=" + password)
+    conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
     cur = conn.cursor()
     cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins text);")
     cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (user_id, str(pins)))
