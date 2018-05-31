@@ -4,7 +4,7 @@ from flask import Flask, request, abort, send_file
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
-    MessageEvent, FollowEvent, TextMessage, LocationMessage, LocationSendMessage,TextSendMessage, StickerSendMessage, MessageImagemapAction, ImagemapArea, ImagemapSendMessage, BaseSize, URIImagemapAction
+    MessageEvent, FollowEvent, UnfollowEvent, TextMessage, LocationMessage, LocationSendMessage,TextSendMessage, StickerSendMessage, MessageImagemapAction, ImagemapArea, ImagemapSendMessage, BaseSize, URIImagemapAction
 )
 
 import mysql.connector
@@ -132,6 +132,20 @@ def on_follow(event):
     conn.commit()
     cur.close()
     conn.close()
+
+@handler.add(UnfollowEvent)
+def on_follow(event):
+    user_id = event.source.user_id
+    conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
+    cur = conn.cursor()
+    cur.execute("DELETE FROM users where user_id=%s", (user_id,))
+    cur.execute("SELECT * FROM users;")
+    row = cur.fetchone()
+    print(row)
+    conn.commit()
+    cur.close()
+    conn.close()
+    
 
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location(event):
