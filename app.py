@@ -155,7 +155,7 @@ def handle_location(event):
         address.append(store["name"], store["vicinity"])
     for toilet in placeData_toilet["results"][:6]:
         pins.append([toilet["geometry"]["location"]["lat"], toilet["geometry"]["location"]["lng"]])
-        address.append(toilet["name"], toilet["vicinity"])
+        address.append([toilet["name"], toilet["vicinity"]])
     print(pins)
     print(address)    
     conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
