@@ -26,6 +26,11 @@ app = Flask(__name__)
 channel_secret = os.environ['LINE_CHANNEL_SECRET']
 channel_access_token = os.environ['LINE_CHANNEL_ACCESS_TOKEN']
 
+dbname = os.environ['dbname']
+user = os.environ['user']
+host = os.environ['host']
+password = os.environ['password']
+
 
 if channel_secret is None:
     print('Specify LINE_CHANNEL_SECRET as environment variable.')
@@ -124,12 +129,11 @@ def handle_location(event):
         pins.append([toilet["geometry"]["location"]["lat"], toilet["geometry"]["location"]["lng"], toilet["name"], toilet["vicinity"]])
     print(pins)
 
-    conn = psycopg2.connect("dbname=d3q0cla0odclij host=ec2-54-204-39-46.compute-1.amazonaws.com user=rxaolbfesqhxoq password=b4ff300937ee5449c17df4333d033af45df6ebcc546bb865355c1dd49bd152b5")
+    conn = psycopg2.connect("dbname=" + dbname + ",host=" + host + ",user=" + user + ",password=" + password)
     cur = conn.cursor()
-    cur.execute("DROP TABLE test;")
-    cur.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data text);")
-    cur.execute("INSERT INTO test (num, data) VALUES (%s, %s)", (200, str(pins)))
-    cur.execute("SELECT * FROM test;")
+    cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins text);")
+    cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (user_id, str(pins)))
+    cur.execute("SELECT * FROM users;")
     row = cur.fetchone()
     print(row)
     conn.commit()
