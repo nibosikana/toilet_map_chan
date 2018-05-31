@@ -70,17 +70,13 @@ def handle_message(event):
         conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
         cur = conn.cursor()
         cur.execute("SELECT pins FROM users WHERE user_id = 'U14146d611c19d261d47a167d0cadf0d6' ")
-        pin = cur.fetchone()        
+        pin = cur.fetchone()
         cur.execute("SELECT address FROM users WHERE user_id = 'U14146d611c19d261d47a167d0cadf0d6' ")        
         add = cur.fetchone()
         t = add[int(event.message.text)][0][0]
-        print(t)         
         a = add[int(event.message.text)][0][1]
-        print(a)                               
-        la = pin[0][0][0]
-        print(la)        
-        lo = pin[0][0][1]
-        print(lo)        
+        la = pin[int(event.message.text)][0][0]
+        lo = pin[int(event.message.text)][0][1]
         conn.commit()
 
         line_bot_api.reply_message(
@@ -166,7 +162,7 @@ def handle_location(event):
     conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
     cur = conn.cursor()
     #cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins real[], address text[]);")
-    cur.execute("INSERT INTO users (user_id, pins, address) VALUES (%s, %s, %s)", (user_id, pins, address))
+    #cur.execute("INSERT INTO users (user_id, pins, address) VALUES (%s, %s, %s)", (user_id, pins, address))
     cur.execute("UPDATE users SET pins=%s, address=%s WHERE user_id=%s", (pins, address, user_id))
     cur.execute("SELECT * FROM users;")
     row = cur.fetchone()
