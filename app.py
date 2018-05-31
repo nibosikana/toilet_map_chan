@@ -8,6 +8,7 @@ from linebot.models import (
 )
 
 import mysql.connector
+import psycopg2
 
 
 from PIL import Image, ImageFilter
@@ -43,19 +44,8 @@ handler = WebhookHandler(channel_secret)
 
 @app.route("/")
 def hello_world():
-    conn = mysql.connector.connect(
-    host = 'localhost',
-    port = 3306,
-    user = 'root',
-    password = '',
-    database = 'toilet_map_chan',
-    )
-    connected = conn.is_connected()
-    print(connected)
-    if (not connected):
-        conn.ping(True)
-
-    return "hello world!"
+    dsn = os.environ.get('postgres://rxaolbfesqhxoq:b4ff300937ee5449c17df4333d033af45df6ebcc546bb865355c1dd49bd152b5@ec2-54-204-39-46.compute-1.amazonaws.com:5432/d3q0cla0odclij')
+    return psycopg2.connect(dsn)
 
 @app.route("/callback", methods=['POST'])
 def callback():
