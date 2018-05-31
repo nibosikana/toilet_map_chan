@@ -149,16 +149,15 @@ def handle_location(event):
     placeData_toilet = json.loads(placeJson_toilet.text)
 
     for store in placeData_convenience["results"][:6]:
-        pins.append([store["geometry"]["location"]["lat"], store["geometry"]["location"]["lng"], store["name"], store["vicinity"]])
+        pins.append([store["geometry"]["location"]["lat"], store["geometry"]["location"]["lng"]])#, store["name"], store["vicinity"]
     
     for toilet in placeData_toilet["results"][:6]:
-        pins.append([toilet["geometry"]["location"]["lat"], toilet["geometry"]["location"]["lng"], toilet["name"], toilet["vicinity"]])
+        pins.append([toilet["geometry"]["location"]["lat"], toilet["geometry"]["location"]["lng"]])
     print(pins)
-    a = [[1,2],["テスト","じゃないよ"]]
     conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
     cur = conn.cursor()
-    #cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins text[]);")
-    cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (user_id, a))
+    cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins integer[]);")
+    cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (user_id, pins))
     #cur.execute("UPDATE users SET pins=%s WHERE user_id=%s", (str(pins), str(user_id)))
     cur.execute("SELECT * FROM users;")
     row = cur.fetchone()
