@@ -133,7 +133,7 @@ def handle_location(event):
     cur = conn.cursor()
     #cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins text);")
     #cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (user_id, str(pins)))
-    cur.execute("UPDATE users SET pins=%s WHERE user_id=%s", (pins, user_id))
+    cur.execute("UPDATE users SET pins=%s WHERE user_id=%s", (str(pins), user_id))
     cur.execute("SELECT * FROM users;")
     row = cur.fetchone()
     print(row)
