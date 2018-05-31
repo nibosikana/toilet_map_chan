@@ -72,7 +72,7 @@ def handle_message(event):
         cur.execute("SELECT pins FROM users WHERE user_id = 'U14146d611c19d261d47a167d0cadf0d6' ")
         row = cur.fetchone()
         print(row)
-        print(row[0][0][0])
+        r = row[0][0][0]
         conn.commit()
 
         line_bot_api.reply_message(
@@ -84,7 +84,7 @@ def handle_message(event):
                 #       latitude = pins[int(event.message.text)][0],
                 #       longitude = pins[int(event.message.text)][1]
                 # ),
-                #TextSendMessage(text=loc[0][0]),
+                TextSendMessage(text=r),
                 TextSendMessage(text="↑をタップすると詳細が表示されるよ！")
                 
             ]
