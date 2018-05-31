@@ -44,8 +44,11 @@ handler = WebhookHandler(channel_secret)
 
 @app.route("/")
 def hello_world():
-    dsn = os.environ.get('postgres://rxaolbfesqhxoq:b4ff300937ee5449c17df4333d033af45df6ebcc546bb865355c1dd49bd152b5@ec2-54-204-39-46.compute-1.amazonaws.com:5432/d3q0cla0odclij')
-    return psycopg2.connect(dsn)
+    conn = psycopg2.connect("dbname=d3q0cla0odclij host=ec2-54-204-39-46.compute-1.amazonaws.com user=rxaolbfesqhxoq")
+    cur = conn.cursor()
+    cur.close()
+    conn.close()
+    return "hello world!"
 
 @app.route("/callback", methods=['POST'])
 def callback():
