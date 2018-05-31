@@ -47,6 +47,7 @@ def hello_world():
     cur.execute("SELECT * FROM test;")
     row = cur.fetchone()
     print(row)
+    conn.commit()
     cur.close()
     conn.close()
     return "hello world!"
