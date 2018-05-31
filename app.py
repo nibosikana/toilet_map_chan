@@ -68,7 +68,7 @@ def handle_message(event):
         user_id = event.source.user_id
         conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
         cur = conn.cursor()
-        cur.execute("SELECT pins FROM users WHERE user_id=%s", (user_id))
+        cur.execute("SELECT pins FROM users WHERE user_id=%s", (str(user_id)))
         row = cur.fetchone()
         print(row)
         conn.commit()
