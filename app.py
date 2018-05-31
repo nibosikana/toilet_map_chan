@@ -125,7 +125,7 @@ def on_follow(event):
     address = []
     conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
     cur = conn.cursor()
-    cur.execute("INSERT INTO users (user_id, pins, address) VALUES (%s, %s)", (user_id, pins, address))
+    cur.execute("INSERT INTO users (user_id, pins, address) VALUES (%s, %s, %s)", (user_id, pins, address))
     cur.execute("SELECT * FROM users;")
     row = cur.fetchone()
     print(row)
