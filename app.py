@@ -103,7 +103,7 @@ def handle_message(event):
             event.reply_token,
             [
                 TextSendMessage(text='line://nv/location'),
-                TextSendMessage(text='現在地を教えてくれたら近くのトイレを探すよ！')
+                TextSendMessage(text='現在地を教えてくれたら近くのトイレを探すよ！{}'.format(chr(0x100029)))
             ]
         )
 
@@ -238,7 +238,7 @@ def handle_location(event):
         event.reply_token,
         [
             ImagemapSendMessage(base_url = 'https://{}/imagemap/{}'.format(request.host, urllib.parse.quote_plus(map_image_url)),alt_text = '地図',base_size = BaseSize(height=imagesize, width=imagesize),actions = actions),
-            TextSendMessage(text='ピンをタップするかピンの番号を入力すると詳細が送られるよ！')
+            TextSendMessage(text='ピンをタップするかピンの番号を入力すると詳細が送られるよ！{}'.format(chr(0x100029)))
         ]
     )
 
