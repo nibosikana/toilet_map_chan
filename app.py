@@ -154,10 +154,10 @@ def handle_location(event):
     for toilet in placeData_toilet["results"][:6]:
         pins.append([toilet["geometry"]["location"]["lat"], toilet["geometry"]["location"]["lng"], toilet["name"], toilet["vicinity"]])
     print(pins)
-    a = [["テスト","だよ"],["テスト１","じゃないよ"]]
+    a = [["テスト","だよ"],["テスト１",2]]
     conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
     cur = conn.cursor()
-    cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins text[]);")
+    #cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins text[]);")
     cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (user_id, a))
     #cur.execute("UPDATE users SET pins=%s WHERE user_id=%s", (str(pins), str(user_id)))
     cur.execute("SELECT * FROM users;")
