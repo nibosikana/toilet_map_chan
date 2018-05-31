@@ -26,11 +26,6 @@ app = Flask(__name__)
 channel_secret = os.environ['LINE_CHANNEL_SECRET']
 channel_access_token = os.environ['LINE_CHANNEL_ACCESS_TOKEN']
 
-REMOTE_HOST = os.environ['REMOTE_HOST']
-REMOTE_DB_NAME = os.environ['REMOTE_DB_NAME']
-REMOTE_DB_USER = os.environ['REMOTE_DB_USER']
-REMOTE_DB_PASS = os.environ['REMOTE_DB_PASS']
-REMOTE_DB_TB = os.environ['REMOTE_DB_TB']
 
 if channel_secret is None:
     print('Specify LINE_CHANNEL_SECRET as environment variable.')
@@ -46,6 +41,12 @@ handler = WebhookHandler(channel_secret)
 def hello_world():
     conn = psycopg2.connect("dbname=d3q0cla0odclij host=ec2-54-204-39-46.compute-1.amazonaws.com user=rxaolbfesqhxoq password=b4ff300937ee5449c17df4333d033af45df6ebcc546bb865355c1dd49bd152b5")
     cur = conn.cursor()
+    cur.execute("DROP TABLE test;")
+    cur.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
+    cur.execute("INSERT INTO test (num, data) VALUES (%s, %s)", (100, "abc'def"))
+    cur.execute("SELECT * FROM test;")
+    row = cur.fetchone()
+    print(row)
     cur.close()
     conn.close()
     return "hello world!"
