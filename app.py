@@ -73,19 +73,19 @@ def handle_message(event):
         pin = cur.fetchone()        
         cur.execute("SELECT address FROM users WHERE user_id = 'U14146d611c19d261d47a167d0cadf0d6' ")        
         add = cur.fetchone()
-        print(pin)        
-        print(add)
+        print(pin[0][0][0])        
+        print(add[0][0][0])
         conn.commit()
 
         line_bot_api.reply_message(
             event.reply_token,
             [
-                # LocationSendMessage(
-                #       title = pins[int(event.message.text)][2],
-                #       address = pins[int(event.message.text)][3],
-                #       latitude = row[int(event.message.text)][0],
-                #       longitude = row[int(event.message.text)][1]
-                # ),
+                LocationSendMessage(
+                      title = add[int(event.message.text)][0][0][0],
+                      address = add[int(event.message.text)][0][0][1],
+                      latitude = pin[int(event.message.text)][0][0][0],
+                      longitude = pin[int(event.message.text)][0][0][1]
+                ),
                 # TextSendMessage(text=r),
                 TextSendMessage(text="↑をタップすると詳細が表示されるよ！")
                 
