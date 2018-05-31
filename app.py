@@ -72,14 +72,18 @@ def handle_message(event):
         cur.execute("SELECT pins FROM users WHERE user_id=%s", (user_id,))
         pin = cur.fetchone()
         print(pin)
+        print(pin[0][0][0])        
         cur.execute("SELECT address FROM users WHERE user_id=%s", (user_id,))
         add = cur.fetchone()
         print(add)
         t = add[int(event.message.text)][0][0]
+        print(t)
         a = add[int(event.message.text)][0][1]
-
+        print(a)
         la = pin[int(event.message.text)][0][0]
+        print(la)        
         lo = pin[int(event.message.text)][0][1]
+        print(lo)
         conn.commit()
 
         line_bot_api.reply_message(
