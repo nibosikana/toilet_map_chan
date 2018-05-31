@@ -76,13 +76,13 @@ def handle_message(event):
         cur.execute("SELECT address FROM users WHERE user_id=%s", (user_id,))
         add = cur.fetchone()
         print(add[0][0][0])
-        t = add[int(event.message.text)][0][0]
+        t = [0]add[int(event.message.text)][0]
         print(t)
-        a = add[int(event.message.text)][0][1]
+        a = [0]add[int(event.message.text)][1]
         print(a)
-        la = pin[int(event.message.text)][0][0]
+        la = [0]pin[int(event.message.text)][0]
         print(la)        
-        lo = pin[int(event.message.text)][0][1]
+        lo = [0]pin[int(event.message.text)][1]
         print(lo)
         conn.commit()
 
