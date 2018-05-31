@@ -73,7 +73,8 @@ def handle_message(event):
         pin = cur.fetchone()        
         cur.execute("SELECT address FROM users WHERE user_id = 'U14146d611c19d261d47a167d0cadf0d6' ")        
         add = cur.fetchone()
-        print(pin[0][0][0])        
+        print(pin[0][0][0]) 
+        print(type(pin[0][0][0]))                       
         print(add[0][0][0])
         conn.commit()
 
@@ -83,16 +84,15 @@ def handle_message(event):
                 LocationSendMessage(
                       title = add[int(event.message.text)][0][0][0],
                       address = add[int(event.message.text)][0][0][1],
-                      latitude = int(pin[int(event.message.text)][0][0][0]),
-                      longitude = int(pin[int(event.message.text)][0][0][1])
+                      latitude = pin[int(event.message.text)][0][0][0],
+                      longitude = pin[int(event.message.text)][0][0][1]
                 ),
-                # TextSendMessage(text=r),
                 TextSendMessage(text="↑をタップすると詳細が表示されるよ！")
                 
             ]
         )
-        # cur.close()
-        # conn.close()
+        cur.close()
+        conn.close()
     else:
         line_bot_api.reply_message(
             event.reply_token,
@@ -160,9 +160,9 @@ def handle_location(event):
     print(address)    
     conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
     cur = conn.cursor()
-    cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins real[], address text[]);")
+    #cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins real[], address text[]);")
     cur.execute("INSERT INTO users (user_id, pins, address) VALUES (%s, %s, %s)", (user_id, pins, address))
-    #cur.execute("UPDATE users SET pins=%s WHERE user_id=%s", (pins, user_id))
+    cur.execute("UPDATE users SET pins=%s, address=%s WHERE user_id=%s", (pins, address, user_id))
     cur.execute("SELECT * FROM users;")
     row = cur.fetchone()
     print(row)
