@@ -69,10 +69,10 @@ def handle_message(event):
         print(user_id)
         conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
         cur = conn.cursor()
-        cur.execute("SELECT pins FROM users WHERE user_id=%s", (user_id))
+        cur.execute("SELECT pins FROM users WHERE user_id=%s", (user_id,))
         pin = cur.fetchone()
         print(pin)
-        cur.execute("SELECT address FROM users WHERE user_id=%s", (user_id))
+        cur.execute("SELECT address FROM users WHERE user_id=%s", (user_id,))
         add = cur.fetchone()
         print(add)
         t = add[int(event.message.text)][0][0]
