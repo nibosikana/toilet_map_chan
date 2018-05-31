@@ -70,11 +70,11 @@ def handle_message(event):
         conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
         cur = conn.cursor()
         cur.execute("SELECT pins FROM users WHERE user_id = 'U14146d611c19d261d47a167d0cadf0d6' ")
+        pin = cur.fetchone()        
         cur.execute("SELECT address FROM users WHERE user_id = 'U14146d611c19d261d47a167d0cadf0d6' ")        
-        row = cur.fetchall()
-        print(row)
-        r = row[0][0][0]
-        print(r)
+        add = cur.fetchone()
+        print(pin)        
+        print(add)
         conn.commit()
 
         line_bot_api.reply_message(
