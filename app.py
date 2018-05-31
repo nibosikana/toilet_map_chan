@@ -84,7 +84,7 @@ def handle_message(event):
                 #       latitude = pins[int(event.message.text)][0],
                 #       longitude = pins[int(event.message.text)][1]
                 # ),
-                #TextSendMessage(text=row),
+                TextSendMessage(text=loc[0][0]),
                 TextSendMessage(text="↑をタップすると詳細が表示されるよ！")
                 
             ]
@@ -155,7 +155,7 @@ def handle_location(event):
     print(pins)
     conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
     cur = conn.cursor()
-    cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins decimal[]);")
+    #cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins decimal[]);")
     cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (user_id, pins))
     #cur.execute("UPDATE users SET pins=%s WHERE user_id=%s", (str(pins), str(user_id)))
     cur.execute("SELECT * FROM users;")
