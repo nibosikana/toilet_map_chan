@@ -43,6 +43,18 @@ handler = WebhookHandler(channel_secret)
 
 @app.route("/")
 def hello_world():
+    conn = mysql.connector.connect(
+    host = 'localhost',
+    port = 3306,
+    user = 'root',
+    password = '',
+    database = 'toilet_map_chan',
+    )
+    connected = conn.is_connected()
+    print(connected)
+    if (not connected):
+        conn.ping(True)
+
     return "hello world!"
 
 @app.route("/callback", methods=['POST'])
@@ -78,18 +90,6 @@ def handle_message(event):
             ]
         )
     else:
-        conn = mysql.connector.connect(
-            host = 'localhost',
-            port = 3306,
-            user = 'root',
-            password = '',
-            #database = 'toilet_map_chan',
-        )
-        connected = conn.is_connected()
-        print(connected)
-        if (not connected):
-            conn.ping(True)
-
         line_bot_api.reply_message(
             event.reply_token,
             [
