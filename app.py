@@ -39,16 +39,6 @@ handler = WebhookHandler(channel_secret)
 
 @app.route("/")
 def hello_world():
-    conn = psycopg2.connect("dbname=d3q0cla0odclij host=ec2-54-204-39-46.compute-1.amazonaws.com user=rxaolbfesqhxoq password=b4ff300937ee5449c17df4333d033af45df6ebcc546bb865355c1dd49bd152b5")
-    cur = conn.cursor()
-    cur.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
-    cur.execute("INSERT INTO test (num, data) VALUES (%s, %s)", (100, "abc'def"))
-    cur.execute("SELECT * FROM test;")
-    row = cur.fetchone()
-    print(row)
-    conn.commit()
-    cur.close()
-    conn.close()
     return "hello world!"
 
 @app.route("/callback", methods=['POST'])
@@ -134,24 +124,16 @@ def handle_location(event):
         pins.append([toilet["geometry"]["location"]["lat"], toilet["geometry"]["location"]["lng"], toilet["name"], toilet["vicinity"]])
     print(pins)
 
-    # conn = MySQLdb.connect(host='127.0.0.1', user='root', passwd='', db='toilet_map_chan')
-    # c = conn.cursor()
-    # conn.is_connected()
-    # try:
-    #     sql = "SELECT `id` FROM`"+REMOTE_DB_TB+"` WHERE `user_id` = '"+user_id+"';"
-    #     c.execute(sql)
-    #     ret = c.fetchall()
-    #     if len(ret) == 0:
-    #         sql = "INSERT INTO `"+REMOTE_DB_TB+"` (`user_id`, `pins`)\
-    #           VALUES ('"+user_id+"', '"+str(pins)+"', 1);"
-    #     elif len(ret) == 1:
-    #         sql = "UPDATE `"+REMOTE_DB_TB+"` SET `pins` = '"+str(pins)+"',\
-    #         `status` = '1' WHERE `user_id` = '"+user_id+"';"
-    #     c.execute(sql)
-    #     conn.commit()
-    # finally:
-    # conn.close()
-    # c.close()
+    conn = psycopg2.connect("dbname=d3q0cla0odclij host=ec2-54-204-39-46.compute-1.amazonaws.com user=rxaolbfesqhxoq password=b4ff300937ee5449c17df4333d033af45df6ebcc546bb865355c1dd49bd152b5")
+    cur = conn.cursor()
+    cur.execute("CREATE TABLE user (id serial PRIMARY KEY, user_id text, pins text);")
+    cur.execute("INSERT INTO user (user_id, pins) VALUES (%s, %s)", (user_id, pins))
+    cur.execute("SELECT * FROM test;")
+    row = cur.fetchone()
+    print(row)
+    conn.commit()
+    cur.close()
+    conn.close()
 
     map_image_url = 'https://maps.googleapis.com/maps/api/staticmap?center={},{}&zoom={}&size=520x520&scale=2&maptype=roadmap&key={}'.format(lat, lon, zoomlevel, key)
     map_image_url += '&markers=color:{}|label:{}|{},{}'.format('red', '', lat, lon)
