@@ -71,11 +71,8 @@ def handle_message(event):
         cur = conn.cursor()
         cur.execute("SELECT pins FROM users WHERE user_id=%s", (user_id,))
         pin = cur.fetchone()
-        print(pin)
-        print(pin[0][0][0])        
         cur.execute("SELECT address FROM users WHERE user_id=%s", (user_id,))
         add = cur.fetchone()
-        print(add[0][0][0])
         t = add[0][int(event.message.text)][0]
         print(t)
         a = add[0][int(event.message.text)][1]
@@ -125,9 +122,10 @@ def imagemap(url, size):
 def on_follow(event):
     user_id = event.source.user_id
     pins = []
+    address = []
     conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
     cur = conn.cursor()
-    cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (str(user_id), str(pins)))
+    cur.execute("INSERT INTO users (user_id, pins, address) VALUES (%s, %s)", (user_id, pins, address))
     cur.execute("SELECT * FROM users;")
     row = cur.fetchone()
     print(row)
