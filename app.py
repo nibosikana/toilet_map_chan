@@ -4,7 +4,7 @@ from flask import Flask, request, abort, send_file
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
-    MessageEvent, TextMessage, LocationMessage, LocationSendMessage,TextSendMessage, StickerSendMessage, MessageImagemapAction, ImagemapArea, ImagemapSendMessage, BaseSize, URIImagemapAction
+    MessageEvent, FollowEvent, TextMessage, LocationMessage, LocationSendMessage,TextSendMessage, StickerSendMessage, MessageImagemapAction, ImagemapArea, ImagemapSendMessage, BaseSize, URIImagemapAction
 )
 
 import mysql.connector
@@ -98,10 +98,22 @@ def imagemap(url, size):
     byte_io.seek(0)
     return send_file(byte_io, mimetype='image/png')
 
+@handler.add(FollowEvent)
+def on_follow(event):
+    user_id = event.source.user_id
+    pins = []
+    conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
+    cur = conn.cursor()
+    cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (user_id, str(pins)))
+    cur.execute("SELECT * FROM users;")
+    row = cur.fetchone()
+    print(row)
+    conn.commit()
+    cur.close()
+    conn.close()
 
 @handler.add(MessageEvent, message=LocationMessage)
 def handle_location(event):
-    
     user_id = event.source.user_id
     pins = []
     
