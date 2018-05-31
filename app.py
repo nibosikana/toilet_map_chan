@@ -65,6 +65,13 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     if event.message.text.isdigit():
+        user_id = event.source.user_id
+        conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
+        cur = conn.cursor()
+        cur.execute("SELECT pins FROM users WHERE user_id=%s", (user_id))
+        row = cur.fetchone()
+        print(row)
+        conn.commit()
 
         line_bot_api.reply_message(
             event.reply_token,
@@ -76,8 +83,12 @@ def handle_message(event):
                 #       longitude = pins[int(event.message.text)][1]
                 # ),
                 TextSendMessage(text="↑をタップすると詳細が表示されるよ！")
+                print(row)
+                
             ]
         )
+        cur.close()
+        conn.close()
     else:
         line_bot_api.reply_message(
             event.reply_token,
