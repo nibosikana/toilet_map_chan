@@ -128,7 +128,7 @@ def handle_location(event):
     cur = conn.cursor()
     cur.execute("DROP TABLE test;")
     cur.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
-    cur.execute("INSERT INTO test (num, data) VALUES (%s, %s)", ([200, "abc'def"]))
+    cur.execute("INSERT INTO test (num, data) VALUES (%s, %s)", (200, ["abc'def",500]))
     cur.execute("SELECT * FROM test;")
     row = cur.fetchone()
     print(row)
