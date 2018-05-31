@@ -131,8 +131,9 @@ def handle_location(event):
 
     conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
     cur = conn.cursor()
-    cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins text);")
-    cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (user_id, str(pins)))
+    #cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins text);")
+    #cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (user_id, str(pins)))
+    cur.execute("UPDATE users SET pins=%s WHERE id=%s", (pins, user_id))
     cur.execute("SELECT * FROM users;")
     row = cur.fetchone()
     print(row)
