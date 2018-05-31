@@ -92,7 +92,7 @@ def handle_message(event):
                       latitude = la,
                       longitude = lo
                 ),
-                TextSendMessage(text="↑をタップすると詳細が表示されるよ！")
+                TextSendMessage(text="↑をタップすると詳細が表示されるよ！{}".format(chr(0x100029)))
                 
             ]
         )
@@ -134,7 +134,7 @@ def on_follow(event):
     conn.close()
 
 @handler.add(UnfollowEvent)
-def on_follow(event):
+def on_unfollow(event):
     user_id = event.source.user_id
     conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
     cur = conn.cursor()
