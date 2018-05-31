@@ -66,9 +66,10 @@ def callback():
 def handle_message(event):
     if event.message.text.isdigit():
         user_id = event.source.user_id
+        print(user_id)
         conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
         cur = conn.cursor()
-        cur.execute("SELECT pins FROM users WHERE user_id='%s'", (user_id))
+        cur.execute("SELECT pins FROM users WHERE user_id=%s", (user_id))
         row = cur.fetchone()
         print(row)
         conn.commit()
@@ -114,7 +115,7 @@ def on_follow(event):
     pins = []
     conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
     cur = conn.cursor()
-    cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (user_id, str(pins)))
+    cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (str(user_id), str(pins)))
     cur.execute("SELECT * FROM users;")
     row = cur.fetchone()
     print(row)
@@ -155,7 +156,7 @@ def handle_location(event):
     cur = conn.cursor()
     #cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins text);")
     #cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (user_id, str(pins)))
-    cur.execute("UPDATE users SET pins=%s WHERE user_id=%s", (str(pins), user_id))
+    cur.execute("UPDATE users SET pins=%s WHERE user_id=%s", (str(pins), str(user_id)))
     cur.execute("SELECT * FROM users;")
     row = cur.fetchone()
     print(row)
