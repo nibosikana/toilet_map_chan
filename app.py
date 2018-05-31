@@ -75,7 +75,7 @@ def handle_message(event):
         print(pin[0][0][0])        
         cur.execute("SELECT address FROM users WHERE user_id=%s", (user_id,))
         add = cur.fetchone()
-        print(add)
+        print(add[0][0][0])
         t = add[int(event.message.text)][0][0]
         print(t)
         a = add[int(event.message.text)][0][1]
