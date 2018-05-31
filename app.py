@@ -41,7 +41,6 @@ handler = WebhookHandler(channel_secret)
 def hello_world():
     conn = psycopg2.connect("dbname=d3q0cla0odclij host=ec2-54-204-39-46.compute-1.amazonaws.com user=rxaolbfesqhxoq password=b4ff300937ee5449c17df4333d033af45df6ebcc546bb865355c1dd49bd152b5")
     cur = conn.cursor()
-    cur.execute("DROP TABLE test;")
     cur.execute("CREATE TABLE test (id serial PRIMARY KEY, num integer, data varchar);")
     cur.execute("INSERT INTO test (num, data) VALUES (%s, %s)", (100, "abc'def"))
     cur.execute("SELECT * FROM test;")
