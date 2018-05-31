@@ -70,9 +70,11 @@ def handle_message(event):
         conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
         cur = conn.cursor()
         cur.execute("SELECT pins FROM users WHERE user_id = 'U14146d611c19d261d47a167d0cadf0d6' ")
+        cur.execute("SELECT address FROM users WHERE user_id = 'U14146d611c19d261d47a167d0cadf0d6' ")        
         row = cur.fetchone()
         print(row)
         r = row[0][0][0]
+        print(r)
         conn.commit()
 
         line_bot_api.reply_message(
@@ -81,10 +83,10 @@ def handle_message(event):
                 # LocationSendMessage(
                 #       title = pins[int(event.message.text)][2],
                 #       address = pins[int(event.message.text)][3],
-                #       latitude = pins[int(event.message.text)][0],
-                #       longitude = pins[int(event.message.text)][1]
+                #       latitude = row[int(event.message.text)][0],
+                #       longitude = row[int(event.message.text)][1]
                 # ),
-                TextSendMessage(text=r),
+                # TextSendMessage(text=r),
                 TextSendMessage(text="↑をタップすると詳細が表示されるよ！")
                 
             ]
@@ -129,6 +131,7 @@ def on_follow(event):
 def handle_location(event):
     user_id = event.source.user_id
     pins = []
+    address = []
     
     lat = event.message.latitude
     lon = event.message.longitude
@@ -148,15 +151,17 @@ def handle_location(event):
     placeData_toilet = json.loads(placeJson_toilet.text)
 
     for store in placeData_convenience["results"][:6]:
-        pins.append([store["geometry"]["location"]["lat"], store["geometry"]["location"]["lng"]])#, store["name"], store["vicinity"]
-    
+        pins.append([store["geometry"]["location"]["lat"], store["geometry"]["location"]["lng"]])
+        address.append(store["name"], store["vicinity"])
     for toilet in placeData_toilet["results"][:6]:
         pins.append([toilet["geometry"]["location"]["lat"], toilet["geometry"]["location"]["lng"]])
+        address.append(toilet["name"], toilet["vicinity"])
     print(pins)
+    print(address)    
     conn = psycopg2.connect("dbname=" + dbname + " host=" + host + " user=" + user + " password=" + password)
     cur = conn.cursor()
-    cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins real[]);")
-    cur.execute("INSERT INTO users (user_id, pins) VALUES (%s, %s)", (user_id, pins))
+    cur.execute("CREATE TABLE users (id serial PRIMARY KEY, user_id text, pins real[], address text[]);")
+    cur.execute("INSERT INTO users (user_id, pins, address) VALUES (%s, %s, %s)", (user_id, pins, address))
     #cur.execute("UPDATE users SET pins=%s WHERE user_id=%s", (pins, user_id))
     cur.execute("SELECT * FROM users;")
     row = cur.fetchone()
